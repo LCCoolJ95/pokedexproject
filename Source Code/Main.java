@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.Arrays;
-import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
+import java.sql.DataTruncation;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,7 +37,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 /** Holds everything within Pokédex Pro */
@@ -173,8 +172,6 @@ public class Main extends Application {
 	public String clearDexPage;
 	/** String that holds a Pokémon's name for form switching */
 	public String pokemonFormNameHolder;
-	/** String that holds the converted number */
-	public String noToString;
 	/** Species strengths, commonly referred to by fans as base stats, are the inherent values of a species or form of a species that are used to
 	 * the stats of a Pokémon.<br>
 	 * baseStats[0]: Base Hit Points<br>
@@ -832,7 +829,7 @@ public class Main extends Application {
 	
 	/**
 	 * This main part makes the program launch
-	 	* @param args 
+	 	* @param args used for the launch within main
 	 */
 	public static void main(String[] args) { // This main part makes the program launch
 		launch(args); // Launches start, I believe
@@ -844,7 +841,7 @@ public class Main extends Application {
 	public void start(Stage placeStage) throws Exception {
 		Class.forName("com.mysql.cj.jdbc.Driver"); // Loads the JDBC driver
 		/** Connects to the database */
-		connection = DriverManager.getConnection("jdbc:mysql://localhost/pokedatabase", "root", "sesame");
+		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pokedatabase", "root", "sesame");
 		statement = connection.createStatement(); // Used to write query statements to the database
 		/** Query statement that grabs all the Pokémon names */
 		pokemonNames = statement.executeQuery("SELECT pokemon_name FROM pokemon LIMIT 890");
@@ -1075,11 +1072,14 @@ public class Main extends Application {
 		gen7lbl.setLayoutX(16); // Sets the x location of gen7lbl2 to 16
 		gen7lbl.setLayoutY(585); // Sets the y location of gen7lbl2 to 585
 		gen7lbl.setFont(fontBold); // Sets the font of gen7lbl to bold
+		gen7lbl.setTooltip(new Tooltip("Link that takes you to the competitive page for the games, Ultra Sun & Ultra Moon,\nexcept for Meltan"
+				+ " and Melmetal"));
 		gen7link.setLayoutX(54); // Sets the x location of gen7link2 to 54
 		gen7link.setLayoutY(583); // Sets the y location of gen7link2 to 583
 		gen8lbl.setLayoutX(16); // Sets the x location of gen8lbl2 to 16
 		gen8lbl.setLayoutY(608); // Sets the y location of gen8lbl2 to 608
 		gen8lbl.setFont(fontBold); // Sets the font of gen8lbl to bold
+		gen8lbl.setTooltip(new Tooltip("Link that takes you to the competitive page for the games, Sword and Shield"));
 		gen8link.setLayoutX(54); // Sets the x location of gen8link2 to 54
 		gen8link.setLayoutY(605); // Sets the y location of gen8link2 to 605
 		 pokedexAnchor.getChildren().addAll(pokemonNameBox,pokemonSpriteView,shinyCheck,femaleCheck,formBox,pokemonNamelbl,cryButton,
@@ -1760,16 +1760,27 @@ public class Main extends Application {
 		try { // try block for the whole event, and to make sure no errors occur
 			/** If the user inputs a level higher than 100 or lower than 1..., it says no you can't do that */
 			if (Integer.parseInt(levelTF.getText()) >= 101 || Integer.parseInt(levelTF.getText()) <= 0) {
-				final Stage levelProb = new Stage(); // Create a stage called levelProb
-			    levelProb.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
-			    levelProb.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
-			    VBox dialogVbox = new VBox(20); // Create a VBox called dialogVbox
-			    /** Adds everything to the dialogVbox */
-			    dialogVbox.getChildren().add(new Text("Level cannot be higher than 100 or lower than 1"));
-			    Scene dialogScene = new Scene(dialogVbox, 260, 15); // Creates a new scene called dialogScene
-			    levelProb.setScene(dialogScene); // Sets the dialogScene to the levelProb stage
-			    levelProb.getIcons().add(new Image("icon/pokeballIcon.png"));
-			    levelProb.show(); // Shows the levelProb stage
+				final Stage levelProb = new Stage(); // Create a new stage called ohno
+				levelProb.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
+				levelProb.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
+		        VBox levelvbox = new VBox(); // Create a VBox called ohnovbox
+		        AnchorPane levelAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+		        Button okButton = new Button("OK"); // Creates a new button called okButton
+		        okButton.setLayoutX(125); // Sets the x location of okButton to 81
+		        okButton.setLayoutY(40); // Sets the y location of okButton to 56
+		        Label oklbl = new Label("Level cannot be higher than 100 or lower than 1");
+		        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+		        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
+		        levelAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
+		        levelvbox.getChildren().add(levelAnchor); // Adds everything to the ohnovbox
+		        Scene dialogScene = new Scene(levelvbox, 275, 75); // Creates a new scene called dialogScene
+		        levelProb.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
+		        levelProb.getIcons().add(new Image("icon/pokeballIcon.png"));
+		        levelProb.show(); // Shows ohno stage
+		        levelProb.setResizable(false); // Makes sure that ohno can't be resized
+		        okButton.setOnAction(e2 -> { // Event that closes ohno
+		        	levelProb.close(); // Closes ohno
+		        }); // End okButton event
 			} // End if
 			/** If the user input an IV value higher than 31 or lower than 0, it says that you can't do that */
 			else if (Integer.parseInt(HPIVsTF.getText()) >= 32 || Integer.parseInt(HPIVsTF.getText()) <= -1 || 
@@ -1781,13 +1792,24 @@ public class Main extends Application {
 				final Stage IVProb = new Stage(); // Create a stage called IVProb
 				IVProb.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
 				IVProb.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
-			    VBox dialogVbox = new VBox(20); // Create a VBox called dialogVbox
-			    /** Adds everything to the dialogVbox */
-			    dialogVbox.getChildren().add(new Text("IVs cannot be higher than 31 or lower than 0"));
-			    Scene dialogScene = new Scene(dialogVbox, 240, 20); // Create a new scene called dialogScene
-			    IVProb.setScene(dialogScene); // Sets the dialogScene to the IVProb stage
-			    IVProb.getIcons().add(new Image("icon/pokeballIcon.png"));
-			    IVProb.show(); // Shows the IVProb stage
+			    VBox ivVbox = new VBox(20); // Create a VBox called dialogVbox
+		        AnchorPane ivAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+		        Button okButton = new Button("OK"); // Creates a new button called okButton
+		        okButton.setLayoutX(115); // Sets the x location of okButton to 81
+		        okButton.setLayoutY(40); // Sets the y location of okButton to 56
+		        Label oklbl = new Label("IVs cannot be higher than 31 or lower than 0");
+		        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+		        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
+		        ivAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
+		        ivVbox.getChildren().add(ivAnchor); // Adds everything to the ohnovbox
+		        Scene dialogScene = new Scene(ivVbox, 260, 75); // Creates a new scene called dialogScene
+		        IVProb.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
+		        IVProb.getIcons().add(new Image("icon/pokeballIcon.png"));
+		        IVProb.show(); // Shows ohno stage
+		        IVProb.setResizable(false); // Makes sure that ohno can't be resized
+		        okButton.setOnAction(e2 -> { // Event that closes ohno
+		        	IVProb.close(); // Closes ohno
+		        }); // End okButton event
 			} // End else if
 			/** If the user input an EV value higher than 252 or lower than 0, it says you can't do that */
 			else if (Integer.parseInt(HPEVsTF.getText()) >= 253 || Integer.parseInt(HPEVsTF.getText()) <= -1 ||
@@ -1799,13 +1821,24 @@ public class Main extends Application {
 				final Stage EVProb = new Stage(); // Create a stage called EVProb
 				EVProb.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
 				EVProb.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
-			    VBox dialogVbox = new VBox(20); // Create a VBox called dialogVbox
-			    /** Adds everything to the dialogVbox */
-			    dialogVbox.getChildren().add(new Text("EVs cannot be higher than 252 or lower than 0"));
-			    Scene dialogScene = new Scene(dialogVbox, 250, 20); // Create a new scene called dialogScene
-			    EVProb.setScene(dialogScene); // Sets the dialogScene to the EVProb stage
-			    EVProb.getIcons().add(new Image("icon/pokeballIcon.png"));
-			    EVProb.show(); // Shows the EVProb stage
+			    VBox evVbox = new VBox(20); // Create a VBox called dialogVbox
+		        AnchorPane evAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+		        Button okButton = new Button("OK"); // Creates a new button called okButton
+		        okButton.setLayoutX(115); // Sets the x location of okButton to 81
+		        okButton.setLayoutY(40); // Sets the y location of okButton to 56
+		        Label oklbl = new Label("EVs cannot be higher than 252 or lower than 0");
+		        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+		        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
+		        evAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
+		        evVbox.getChildren().add(evAnchor); // Adds everything to the ohnovbox
+		        Scene dialogScene = new Scene(evVbox, 270, 75); // Creates a new scene called dialogScene
+		        EVProb.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
+		        EVProb.getIcons().add(new Image("icon/pokeballIcon.png"));
+		        EVProb.show(); // Shows ohno stage
+		        EVProb.setResizable(false); // Makes sure that ohno can't be resized
+		        okButton.setOnAction(e2 -> { // Event that closes ohno
+		        	EVProb.close(); // Closes ohno
+		        }); // End okButton event
 			} // end else if
 			else { // Else...
 				IVs[0] = Integer.parseInt(HPIVsTF.getText()); // Sets IVs[0] from HPIVsTF, converted from string to int
@@ -1842,11 +1875,23 @@ public class Main extends Application {
 				    tooManyEVs.initModality(Modality.APPLICATION_MODAL); // // Specifies the modality for this stage.
 				    tooManyEVs.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
 				    VBox dialogVbox = new VBox(20); // Creates a VBox called dialogVbox
-				    dialogVbox.getChildren().add(new Text("EV total cannot exceed 510")); // Adds everything to dialogVbox
-				    Scene dialogScene = new Scene(dialogVbox, 150, 20); // Creates a new scene called dialogScene
-				    tooManyEVs.setScene(dialogScene); // Sets the dialogScene to the tooManyEVs stage
+			        AnchorPane toomanyAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+			        Button okButton = new Button("OK"); // Creates a new button called okButton
+			        okButton.setLayoutX(65); // Sets the x location of okButton to 81
+			        okButton.setLayoutY(40); // Sets the y location of okButton to 56
+			        Label oklbl = new Label("EV total cannot exceed 510");
+			        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+			        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
+			        toomanyAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
+			        dialogVbox.getChildren().add(toomanyAnchor); // Adds everything to the ohnovbox
+			        Scene dialogScene = new Scene(dialogVbox, 165, 75); // Creates a new scene called dialogScene
+				    tooManyEVs.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
 				    tooManyEVs.getIcons().add(new Image("icon/pokeballIcon.png"));
-				    tooManyEVs.show(); // shows the tooManyEVs stage
+				    tooManyEVs.show(); // Shows ohno stage
+				    tooManyEVs.setResizable(false); // Makes sure that ohno can't be resized
+			        okButton.setOnAction(e2 -> { // Event that closes ohno
+					    tooManyEVs.close(); // Closes ohno
+			        }); // End okButton event
 				} // End if
 				else { // Else...
 					totalEVsTF.setText(Integer.toString(EVTotal)); // Sets the text of totalEVsTF with EVTotal
@@ -2075,14 +2120,26 @@ public class Main extends Application {
 			final Stage notNumber = new Stage(); // Creates a new stage called notNumber
 			notNumber.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
 			notNumber.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
-		    VBox dialogVbox = new VBox(20); // Creates a VBox called dialogVbox
-		    dialogVbox.getChildren().add(new Text("Make sure all variables are numbers/filled")); // Adds everything to dialogVbox
-		    Scene dialogScene = new Scene(dialogVbox, 225, 20); // Creates a new scene called dialogScene
-		    notNumber.setScene(dialogScene); // Sets the dialogScene scene to the notNumber stage
-		    notNumber.getIcons().add(new Image("icon/pokeballIcon.png"));
-		    notNumber.show(); // Shows the notNumber stage
+		    VBox notnumVbox = new VBox(20); // Creates a VBox called dialogVbox
+	        AnchorPane notnumAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+	        Button okButton = new Button("OK"); // Creates a new button called okButton
+	        okButton.setLayoutX(100); // Sets the x location of okButton to 81
+	        okButton.setLayoutY(40); // Sets the y location of okButton to 56
+	        Label oklbl = new Label("Make sure all fields are numbers/filled");
+	        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+	        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
+	        notnumAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
+	        notnumVbox.getChildren().add(notnumAnchor); // Adds everything to the ohnovbox
+	        Scene dialogScene = new Scene(notnumVbox, 225, 75); // Creates a new scene called dialogScene
+	        notNumber.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
+	        notNumber.getIcons().add(new Image("icon/pokeballIcon.png"));
+	        notNumber.show(); // Shows ohno stage
+	        notNumber.setResizable(false); // Makes sure that ohno can't be resized
+	        okButton.setOnAction(e2 -> { // Event that closes ohno
+	        	notNumber.close(); // Closes ohno
+	        }); // End okButton event
 		} // End catch block
-	}
+	} // End of method
 	
 	/** Method that opens up the gen 7 competitive page */
 	public void openGen7Link() {
@@ -2098,7 +2155,6 @@ public class Main extends Application {
 	public void getPokemon() {
 		formBox.setValue(null); // If the Pokémon had forms in formBox, they're gone now
 		otherFormsList.clear(); // Resets the otherFormsList ObservableList
-		formBox.setVisibleRowCount(formBox.getVisibleRowCount()); // Removes empty space from formBox
 		rockruffAbilityFI.setVisible(false); // Hides the label that reads Rockruff's 4th ability
 		gen7lbl.setVisible(true); // Makes gen 7 label in Abilities appear
 		gen8lbl.setVisible(true); // Makes gen 8 label in Abilities appear
@@ -2332,30 +2388,12 @@ public class Main extends Application {
 				otherFormSelection = createPokemon.getInt(36);
 				/** Sets the prompt text of the form ComboBox with what's selected at the otherForms 2D array */
 				formBox.getSelectionModel().select(otherFormSelection);
+				formBox.setVisibleRowCount(formBox.getVisibleRowCount()); // Removes empty space from formBox
+				formBox.show(); // Shows the forms
+				formBox.hide(); // hides them, this and line above can't see seen
 			} // End else
 		} // End try
 		catch (SQLException e1) { // Catch block, empty because there is no way of an exception happening
-			final Stage doesNotExist = new Stage(); // Create a new stage called doesNotExist
-			doesNotExist.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
-			doesNotExist.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
-            VBox dneVBox = new VBox(); // Create a VBox called dneVBox
-            AnchorPane dneAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
-            Button okButton = new Button("OK"); // Creates a new button called okButton
-            okButton.setLayoutX(81); // Sets the x location of okButton to 81
-            okButton.setLayoutY(56); // Sets the y location of okButton to 56
-            Label oklbl = new Label("Pokémon doe not exist :("); // Label that says Incorrect username/password
-            oklbl.setLayoutX(32); // Sets the x location of oklbl to 32
-            oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
-            dneAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
-            dneVBox.getChildren().add(dneAnchor); // Adds everything to the ohnovbox
-            Scene dialogScene = new Scene(dneVBox, 225, 100); // Creates a new scene called dialogScene
-            doesNotExist.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
-            doesNotExist.getIcons().add(new Image("icon/pokeballIcon.png"));
-            doesNotExist.show(); // Shows ohno stage
-            doesNotExist.setResizable(false); // Makes sure that ohno can't be resized
-            okButton.setOnAction(e2 -> { // Event that closes ohno
-            	doesNotExist.close(); // Closes ohno
-            }); // End okButton event
 		} // End Catch
 	} // End of method
 	
@@ -2480,21 +2518,31 @@ public class Main extends Application {
 		try { // try block for the createPokemonNo query statement
 			/** If the user inputted a number bigger than 890 or lower than 1... */
 			if (Integer.parseInt(pokemonNoBox.getText()) > 890 || Integer.parseInt(pokemonNoBox.getText()) < 1) {
-				final Stage dialog = new Stage(); // Create a new stage called dialog
-                dialog.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
-                dialog.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
-                VBox dialogVbox = new VBox(20); // Create a new VBox called dialogVbox
-                /** Gets everything together into the vbox */
-                dialogVbox.getChildren().add(new Text("Value cannot be lower than 1 or higher than 890"));
-                Scene dialogScene = new Scene(dialogVbox, 260, 20); // Creates a new scene called dialogScene to hold dialogVbox
-                dialog.setScene(dialogScene); // Sets the dialogScene into the dialog stage
-                dialog.getIcons().add(new Image("icon/pokeballIcon.png"));
-                dialog.show(); // Makes the stage to appear
+				final Stage tooBig = new Stage(); // Create a new stage called dialog
+				tooBig.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
+				tooBig.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
+                VBox toobiggVbox = new VBox(20); // Create a new VBox called dialogVbox
+		        AnchorPane toobigAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+		        Button okButton = new Button("OK"); // Creates a new button called okButton
+		        okButton.setLayoutX(135); // Sets the x location of okButton to 81
+		        okButton.setLayoutY(100); // Sets the y location of okButton to 56
+		        Label oklbl = new Label("Value cannot be lower than 1 or higher than 890");
+		        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+		        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
+		        toobigAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
+		        toobiggVbox.getChildren().add(toobigAnchor); // Adds everything to the ohnovbox
+		        Scene dialogScene = new Scene(toobiggVbox, 300, 150); // Creates a new scene called dialogScene
+		        tooBig.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
+		        tooBig.getIcons().add(new Image("icon/pokeballIcon.png"));
+		        tooBig.show(); // Shows ohno stage
+		        tooBig.setResizable(false); // Makes sure that ohno can't be resized
+		        okButton.setOnAction(e2 -> { // Event that closes ohno
+		        	tooBig.close(); // Closes ohno
+		        }); // End okButton event
 			} // End
 			else { // Else
 				formBox.setValue(null); // If the Pokémon had forms in their, they're gone now
 				otherFormsList.clear(); // Resets the otherFormsList ObservableList
-				formBox.setVisibleRowCount(formBox.getVisibleRowCount()); // Removes empty space from formBox
 				gen7lbl.setVisible(true); // Makes the gen7lbl appear
 				gen8lbl.setLayoutX(16); // Sets the x location of gen8lbl2 to 16
 				gen8lbl.setLayoutY(608); // Sets the y location of gen8lbl2 to 608
@@ -2745,6 +2793,9 @@ public class Main extends Application {
 					otherFormSelection = createPokemonNo.getInt(36);
 					/** Sets the prompt text of the form ComboBox with what's selected at the otherForms 2D array */
 					formBox.getSelectionModel().select(otherFormSelection);
+					formBox.setVisibleRowCount(formBox.getVisibleRowCount()); // Removes empty space from formBox
+					formBox.show(); // Shows the forms
+					formBox.hide(); // hides them, this and line above can't see seen
 				} // End else
 			} // End else
 			} // End of try block
@@ -2755,10 +2806,23 @@ public class Main extends Application {
 			notNumber.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
 			notNumber.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
 		    VBox dialogVbox = new VBox(20); // Creates a VBox called dialogVbox
-		    dialogVbox.getChildren().add(new Text("Make sure the variable entered is a number")); // Adds everything to the dialogVbox
-		    Scene dialogScene = new Scene(dialogVbox, 230, 20); // Creates a new scene called dialogScene
-		    notNumber.setScene(dialogScene); // Sets the dialogScene onto the notNumber stage
-		    notNumber.show(); // Shows the notNumber stage
+	        AnchorPane notnumAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+	        Button okButton = new Button("OK"); // Creates a new button called okButton
+	        okButton.setLayoutX(110); // Sets the x location of okButton to 81
+	        okButton.setLayoutY(35); // Sets the y location of okButton to 56
+	        Label oklbl = new Label("Make sure the variable entered is a number");
+	        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+	        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
+	        notnumAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
+	        dialogVbox.getChildren().add(notnumAnchor); // Adds everything to the ohnovbox
+	        Scene dialogScene = new Scene(dialogVbox, 250, 75); // Creates a new scene called dialogScene
+	        notNumber.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
+	        notNumber.getIcons().add(new Image("icon/pokeballIcon.png"));
+	        notNumber.show(); // Shows ohno stage
+	        notNumber.setResizable(false); // Makes sure that ohno can't be resized
+	        okButton.setOnAction(e -> { // Event that closes ohno
+	        	notNumber.close(); // Closes ohno
+	        }); // End okButton event
 		} // End of NumberFormatException catch block
 	} // End of method
 	
@@ -3017,6 +3081,7 @@ public class Main extends Application {
                 hasDexPageSaved = getLogin.getBoolean(6);
                 Scene dialogScene = new Scene(successvbox, 200, 100); // Creates a new scene called dialogScene
                 successful.setScene(dialogScene); // Sets dialogScene scene to the successful stage
+    	        successful.getIcons().add(new Image("icon/pokeballIcon.png"));
                 successful.show(); // Shows the successful stage
                 successful.setResizable(false); // Makes it so that successful cannot be resized
                 okButton.setOnAction(e1 -> { // Event that closes the sucess screen and opens Pokédex Pro
@@ -3317,6 +3382,7 @@ public class Main extends Application {
             ohnovbox.getChildren().add(ohnoAnchor); // Adds everything to the ohnovbox
             Scene dialogScene = new Scene(ohnovbox, 225, 100); // Creates a new scene called dialogScene
             ohno.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
+	        ohno.getIcons().add(new Image("icon/pokeballIcon.png"));
             ohno.show(); // Shows ohno stage
             ohno.setResizable(false); // Makes sure that ohno can't be resized
             okButton.setOnAction(e2 -> { // Event that closes ohno
@@ -3334,6 +3400,7 @@ public class Main extends Application {
 		createPWFI.clear(); // Clears out createPWFI
 		createStage.setScene(createAccountScene); // Sets the createAccountScene scene to createStage stage
 		createStage.setTitle("Create Account"); // Sets the title of createStage to Create Account
+        createStage.getIcons().add(new Image("icon/pokeballIcon.png"));
 		createStage.show(); // Shows createStage stage
 		createStage.setResizable(false); // makes sure that createStage can't be resized
 	} // End of method
@@ -3341,8 +3408,9 @@ public class Main extends Application {
 	/** Method that creates the user's account */
 	public void CreateAccount() {
 		/**  If the user inputs nothing in the username and password, or if any of the fields have ", it says you can't do that */
-		if (createUNFI.getText().equals("") || createPWFI.getText().equals("") || firstNameFI.getText().equals("\"") || 
-				lastNameFI.getText().equals("\"") || createUNFI.getText().equals("\"") || createPWFI.getText().equals("\"")) {
+		if (firstNameFI.getText().equals("") || lastNameFI.getText().equals("") || createUNFI.getText().equals("") || 
+				createPWFI.getText().equals("") || firstNameFI.getText().equals("\"") || lastNameFI.getText().equals("\"") || 
+				createUNFI.getText().equals("\"") || createPWFI.getText().equals("\"")) {
 			final Stage ohno = new Stage(); // Creates a stage called ohno
 			ohno.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
 			ohno.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
@@ -3351,13 +3419,14 @@ public class Main extends Application {
             Button okButton = new Button("OK"); // Create a button called okButton
             okButton.setLayoutX(81); // Sets the x location of okButton to 81
             okButton.setLayoutY(56); // Sets the y location of okButton to 56
-            Label oklbl = new Label("Invalid characters inputted"); // Label called Invalid characters inputted
-            oklbl.setLayoutX(32); // Sets the x location of oklbl to 32
+            Label oklbl = new Label("All fields must be filled out"); // Label called Invalid characters inputted
+            oklbl.setLayoutX(40); // Sets the x location of oklbl to 32
             oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
             ohnoAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to ohnoAnchor
             ohnovbox.getChildren().add(ohnoAnchor); // Adds everything to ohnovbox
             Scene dialogScene = new Scene(ohnovbox, 225, 100); // Creates scene called dialogScene
             ohno.setScene(dialogScene); // Sets dialogScene into ohno
+	        ohno.getIcons().add(new Image("icon/pokeballIcon.png"));
             ohno.show(); // Shows ohno stage
             ohno.setResizable(false); // Makes sure that ohno can't be resized
             okButton.setOnAction(e2 -> { // Event that closes the ohno stage
@@ -3385,6 +3454,7 @@ public class Main extends Application {
             confirm.getChildren().add(confirmAnchor); // Adds everything to confirm
             Scene dialogScene = new Scene(confirm, 218, 68); // Creates a new scene called dialogScene
             accountMade.setScene(dialogScene); // Sets dialogScene scene to accountMade stage
+	        accountMade.getIcons().add(new Image("icon/pokeballIcon.png"));
             accountMade.show(); // Shows accountMade
             accountMade.setResizable(false); // Makes sure that accountMade can't be resized
             accountMade.setOnCloseRequest(e -> { // If the user uses the x button to close the dialog box
@@ -3419,13 +3489,14 @@ public class Main extends Application {
             taken.getChildren().add(takenAnchor); // Adds everything to taken
             Scene dialogScene = new Scene(taken, 218, 68); // Creates a scene called dialogScene
             usernameTaken.setScene(dialogScene); // Sets dialogScene scene to usernameTaken stage
+	        usernameTaken.getIcons().add(new Image("icon/pokeballIcon.png"));
             usernameTaken.show(); // Shows usernameTaken stage
             usernameTaken.setResizable(false); // Makes sure that usernameTaken can't be resized
             okButton.setOnAction(e2 -> { // Event that closes usernameTaken stage
             	usernameTaken.close(); // Closes usernameTaken
             }); // Ends okButton event
 		} // End catch block
-		catch (MysqlDataTruncation e2) { // Checks to make sure the username and password are not more than 20 characters
+		catch (DataTruncation e2) { // Checks to make sure the username and password are not more than 20 characters
 				final Stage tooLong = new Stage(); // Creates a stage called tooLong
 				tooLong.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
 				tooLong.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
@@ -3435,13 +3506,14 @@ public class Main extends Application {
                 okButton.setLayoutX(150); // Sets the x location of okButton to 150
                 okButton.setLayoutY(25); // Sets the y location of okButton to 25
                 /** Label that says Username and password cannot be more than 20 characters */
-                Label oklbl = new Label("Username and password cannot be more than 20 characters");
+                Label oklbl = new Label("Username and/or password cannot be more than 20 characters");
                 oklbl.setLayoutX(4); // Sets the x location of oklbl to 4
                 oklbl.setLayoutY(5); // Sets the y location of oklbl to 5
                 tooLongAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to tooLongAnchor
                 tooLongBox.getChildren().add(tooLongAnchor); // Adds everything to tooLongBox
-                Scene dialogScene = new Scene(tooLongBox, 326, 68); // Creates scene called dialogScene
+                Scene dialogScene = new Scene(tooLongBox, 340, 68); // Creates scene called dialogScene
                 tooLong.setScene(dialogScene); // Sets dialogScene scene to tooLong stage
+    	        tooLong.getIcons().add(new Image("icon/pokeballIcon.png"));
                 tooLong.show(); // Shows tooLong stage
                 tooLong.setResizable(false); // Makes sure that tooLong window can't be resized
                 okButton.setOnAction(e1 -> { // Event that closes tooLong
@@ -3471,6 +3543,7 @@ public class Main extends Application {
             tooLongBox.getChildren().add(tooLongAnchor); // Adds everything to tooLongBox
             Scene dialogScene = new Scene(tooLongBox, 326, 68); // Creates a scene called dialogScene
             tooLong.setScene(dialogScene); // Sets dialogScene scene to tooLong stage
+	        tooLong.getIcons().add(new Image("icon/pokeballIcon.png"));
             tooLong.show(); // Shows tooLong stage
             tooLong.setResizable(false); // Makes sure that tooLong stage can't be resized
             okButton.setOnAction(e1 -> { // Event that closes tooLong stage
@@ -3498,6 +3571,7 @@ public class Main extends Application {
             tooLongBox.getChildren().add(tooLongAnchor); // Adds everything to tooLongBox
             Scene dialogScene = new Scene(tooLongBox, 326, 68); // Creates a scene called dialogScene
             tooLong.setScene(dialogScene); // Sets the dialogScene scene into tooLong stage
+	        tooLong.getIcons().add(new Image("icon/pokeballIcon.png"));
             tooLong.show(); // Shows tooLong stage
             tooLong.setResizable(false); // Makes sure that tooLong stage can't be resized
             okButton.setOnAction(e1 -> { // Button that closes tooLong
@@ -3531,6 +3605,7 @@ public class Main extends Application {
             tooLongBox.getChildren().add(tooLongAnchor); // Adds everything to tooLongBox
             Scene dialogScene = new Scene(tooLongBox, 326, 68); // Creates a scene called dialogScene
             tooLong.setScene(dialogScene); // Puts the dialogScene scene into tooLong stage
+	        tooLong.getIcons().add(new Image("icon/pokeballIcon.png"));
             tooLong.show(); // Shows the tooLong stage
             tooLong.setResizable(false); // Makes sure that tooLong stage can't be resized
             okButton.setOnAction(e1 -> { // Event that closes tooLong stage
@@ -3542,7 +3617,7 @@ public class Main extends Application {
 	} // End of method
 	
 	/** Method that closes Pokédex Pro 
-	 * @throws SQLException */
+	 * @throws SQLException should never happen tbh */
 	public void closeMain() throws SQLException {
 		mainStage.close(); // Closes Pokedex Pro
 		connection.close(); // Closes database connection
