@@ -1675,12 +1675,12 @@ public class Main extends Application {
         bulbapediaLogo.setOpacity(0.5); // Sets the opacity of bulbapediaLogo to 50%
         bulbapediaLogo.setLayoutX(10); // Sets the x location of bulbapediaLogo to 10
         bulbapediaLogo.setLayoutY(10); // Sets the y location of bulbapediaLogo to 10
-        ImageView serebiiLogo = new ImageView(new Image("logos/serebii.png")); // ImageView that holds Serebii's "logo"
-        serebiiLogo.setFitHeight(50); // Sets the height of serebiiLogo to 50
-        serebiiLogo.setFitWidth(50); // Sets the width of serebiiLogo to 50
+        ImageView serebiiLogo = new ImageView(new Image("logos/serebii.gif")); // ImageView that holds Serebii's "logo"
+        serebiiLogo.setFitHeight(100); // Sets the height of serebiiLogo to 50
+        serebiiLogo.setFitWidth(100); // Sets the width of serebiiLogo to 50
         serebiiLogo.setOpacity(0.5); // Sets the opacity of serebiiLogo to 50%
-        serebiiLogo.setLayoutX(350); // Sets the x location of serebiiLogo to 350
-        serebiiLogo.setLayoutY(10); // Sets the y location of serebiiLogo to 10
+        serebiiLogo.setLayoutX(300); // Sets the x location of serebiiLogo to 350
+        serebiiLogo.setLayoutY(0); // Sets the y location of serebiiLogo to 10
         ImageView nintendoLogo = new ImageView(new Image("logos/nintendo.png")); // ImageView that holds Nintendo's logo
         nintendoLogo.setFitHeight(35); // Sets the height of nintendoLogo to 35
         nintendoLogo.setFitWidth(85); // Sets the width of nintendoLogo to 85
@@ -1691,24 +1691,39 @@ public class Main extends Application {
         pokemonCompanyLogo.setFitHeight(25); // Sets the height of pokemonCompanyLogo to 25
         pokemonCompanyLogo.setFitWidth(100); // Sets the width of pokemonCompanyLogo to 100
         pokemonCompanyLogo.setOpacity(0.5); // Sets the opacity of pokemonCompanyLogo to 50%
-        pokemonCompanyLogo.setLayoutX(285); // Sets the x location of pokemonCompanyLogo to 285
-        pokemonCompanyLogo.setLayoutY(215); // Sets the y location of pokemonCompanyLogo to 215
+        pokemonCompanyLogo.setLayoutX(290); // Sets the x location of pokemonCompanyLogo to 285
+        pokemonCompanyLogo.setLayoutY(125); // Sets the y location of pokemonCompanyLogo to 215
         ImageView gameFreakLogo = new ImageView(new Image("logos/GameFreak.png")); // ImageView that hold's Game Freak's Logo
         gameFreakLogo.setFitHeight(50); // Sets the height of gameFreaklogo to 50
         gameFreakLogo.setFitWidth(75); // Sets the width of gameFreaklogo to 75
         gameFreakLogo.setOpacity(0.5); // Sets the opacity of gameFreaklogo to 50%
-        gameFreakLogo.setLayoutX(160); // Sets the x location of gameFreaklogo to 160
-        gameFreakLogo.setLayoutY(85); // Sets the y location of gameFreaklogo to 85
+        gameFreakLogo.setLayoutX(0); // Sets the x location of gameFreaklogo to 160
+        gameFreakLogo.setLayoutY(95); // Sets the y location of gameFreaklogo to 85
         Button okButton = new Button("OK"); // Creates a new button called okButton
         okButton.setLayoutX(175); // Sets the x location of okButton to 175
-        okButton.setLayoutY(200); // Sets the y location of okButton to 200
-        Label oklbl = new Label("Bulbapedia and Serebii for their pages about the\nPokémon\n\n\n\n\n\n\n\nAll rights go to "
-        		+ "Game Freak/Nintendo/The Pokémon\nCompany"); // Label
+        okButton.setLayoutY(210); // Sets the y location of okButton to 200
+        Label oklbl = new Label("Bulbapedia and Serebii for their pages about the\nPokémon, moves, abilities, and items\nSmogon for their "
+        		+ "competitive pages\n\n\nAll rights go to "
+        		+ "Game Freak, Nintendo, and the Pokémon\nCompany\n\n\nThe Brookdale Community College Computer Science\nLab/Club for helping me"
+        		+ " with this program"); // Label
         oklbl.setFont(fontBold); // Sets the font of oklbl to bold
         oklbl.setLayoutX(60); // Sets the x location of oklbl to 60
         oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
+        ImageView brookdaleLogo = new ImageView(new Image("logos/brookdale.jpg")); // ImageView that holds Brookdale's logo
+        brookdaleLogo.setFitHeight(50); // Sets the height of brookdaleLogo to 50
+        brookdaleLogo.setFitWidth(100); // Sets the width of brookdaleLogo to 50
+        brookdaleLogo.setOpacity(0.5); // Sets the opacity of brookdaleLogo to 50%
+        brookdaleLogo.setLayoutX(285); // Sets the x location of brookdaleLogo to 50
+        brookdaleLogo.setLayoutY(190); // Sets the y location of brookdaleLogo to 95
+        ImageView smogonLogo = new ImageView(new Image("logos/smogon.png")); // ImageView that hold's Smogon's logo
+        smogonLogo.setFitHeight(50); // Sets the height of smogonLogo to 50
+        smogonLogo.setFitWidth(50); // Sets the width of smogonLogo to 50
+        smogonLogo.setOpacity(0.5); // Sets the opacity of smogonLogo to 50%
+        smogonLogo.setLayoutX(275);
+        smogonLogo.setLayoutY(50);
         /** Adds everything to the creditsAnchor */
-        creditsAnchor.getChildren().addAll(okButton,oklbl,bulbapediaLogo,serebiiLogo,nintendoLogo,pokemonCompanyLogo,gameFreakLogo);
+        creditsAnchor.getChildren().addAll(okButton,oklbl,bulbapediaLogo,serebiiLogo,nintendoLogo,pokemonCompanyLogo,gameFreakLogo,
+        		brookdaleLogo, smogonLogo);
         creditvbox.getChildren().add(creditsAnchor); // Adds everything to the creditvbox
         Scene dialogScene = new Scene(creditvbox, 400, 250); // Creates a new scene called dialogScene
         credits.setScene(dialogScene); // Sets the dialogScene scene to credits stage
