@@ -706,8 +706,8 @@ public class Main extends Application {
 	ComboBox<String> itemNameBox = new ComboBox<String>(itemNamesList);
 	/** Label that says Item Name: */
 	Label itemNamelbl = new Label("Item Name:");
-	/** Label that says Item Pocket:*/
-	Label itemPocketlbl = new Label("Item Pocket:");
+	/** Label that says Item Category:*/
+	Label itemPocketlbl = new Label("Item Category:");
 	/** Label that will hold the item's name */
 	Label itemNameFI = new Label();
 	/** Label that will hold the item pocket */
@@ -841,10 +841,10 @@ public class Main extends Application {
 	public void start(Stage placeStage) throws Exception {
 		Class.forName("com.mysql.cj.jdbc.Driver"); // Loads the JDBC driver
 		/** Connects to the database */
-		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pokedatabase", "root", "sesame");
+		connection = DriverManager.getConnection("jdbc:mysql://192.168.1.189:3306/pokedatabase", "root", "sesame");
 		statement = connection.createStatement(); // Used to write query statements to the database
 		/** Query statement that grabs all the Pokémon names */
-		pokemonNames = statement.executeQuery("SELECT pokemon_name FROM pokemon LIMIT 890");
+		pokemonNames = statement.executeQuery("SELECT pokemon_name FROM pokemon LIMIT 890;");
 		while(pokemonNames.next()) { // While loop that fills pokemonNamesList with the names of the Pokémon from the database
 			/** takes the data at the whatever row in column 1 (pokemon_name), and puts it into pokemonNameStorage */
 			pokemonNameStorage = pokemonNames.getString(1); 
@@ -863,19 +863,18 @@ public class Main extends Application {
 			moveNameStorage = moveNames.getString(1);
 			moveNamesList.add(moveNameStorage); // adds what is in moveNameStorage to the moveNamesList
 		} // End of while loop
-		itemNames = statement.executeQuery("SELECT * FROM items;"); // Query statement that grabs all the move names
+		/** Query statement that grabs all the move names */
+		itemNames = statement.executeQuery("SELECT * FROM items ORDER BY item_pocket;");
 		while (itemNames.next()) { // While loop that fills itemNamesList with the names of the items from the database
 			/** takes the data at the whatever row in column 3 (item_name), and puts it into itemNameStorage */
 			itemNameStorage = itemNames.getString(3);
 			itemNamesList.add(itemNameStorage); // adds what is in itemNameStorage to the itemNamesList
 		} // End of while loop
 		pokemonNameID = "default"; // Sets the pokemonNameID back to "default"
-		vbox.setPrefHeight(703.0); // Sets the height of vbox to 703
+		vbox.setPrefHeight(703); // Sets the height of vbox to 703
 		vbox.setPrefWidth(908); // Sets the width of vbox to 908
 		menubar.setPrefWidth(640); // Sets the width of menubar to 640
-		menuitem1.setDisable(true); // Disables menuitem1
-		menuitem4.setDisable(true); // Disables menuitem4
-		menu1.getItems().addAll(menuitem1,menuitem4,menuitem2); // Adds File, Help, Clear saved page, and Close to File
+		menu1.getItems().addAll(menuitem1,menuitem4,menuitem2); // Adds Save Dex Page, Clear Dex Page, and Close to File
 		menu2.getItems().addAll(menuitem3,menuitem5,menuitem6); // Adds Documentation, About, and Credits to Help
 		menubar.getMenus().addAll(menu1,menu2); // Adds the menus to the menubar
 		mainAnchorPane.setPrefHeight(462); // Sets the height of mainAnchorPane to 462
@@ -923,14 +922,14 @@ public class Main extends Application {
 		cryButton.setVisible(false); // Sets the visibility of cryButton to false
 		/** Tooltip to explain what the Cry button does */
 		cryButton.setTooltip(new Tooltip("Button that will play the cry of the Pokémon"));
-		genderRatiolbl.setLayoutX(169); // Sets the x location of genderRatiolbl to 164
+		genderRatiolbl.setLayoutX(169); // Sets the x location of genderRatiolbl to 169
 		genderRatiolbl.setLayoutY(8); // Sets the y location of genderRatiolbl to 8
 		genderRatiolbl.setFont(fontBold); // Sets the font of genderRatiolbl to bold
 		genderRatiolbl.setTooltip(new Tooltip("Gender is a characteristic of Pokémon and humans in the Pokémon world. Starting in the\n"
 				+ "Generation II games, most Pokémon have a gender: male or female; however, some\n"
 				+ "species of Pokémon have unknown gender. The gender mechanic is fundamental to\n"
 				+ "Pokémon breeding.")); // Tooltip explaining Pokémon genders
-		genderRatioFillIn.setLayoutX(169); // Sets the x location of genderRatioFillIn to 164
+		genderRatioFillIn.setLayoutX(169); // Sets the x location of genderRatioFillIn to 169
 		genderRatioFillIn.setLayoutY(25); // Sets the y location of genderRatioFillIn to 25
 		typesLabel.setLayoutX(821); // Sets the x location of typesLabel to 821
 		typesLabel.setLayoutY(8); // Sets the y location of typesLabel to 8
@@ -977,21 +976,21 @@ public class Main extends Application {
 		weightFillIn.setLayoutY(157); // Sets the y location of weightFillIn to 157
 		weightpoundsFI.setLayoutX(22); // Sets the x location of weightpoundsFI to 22
 		weightpoundsFI.setLayoutY(176); // Sets the y location of weightpoundsFI to 176
-		captureRatelbl.setLayoutX(169); // Sets the x location of captureRatelbl to 164
+		captureRatelbl.setLayoutX(169); // Sets the x location of captureRatelbl to 169
 		captureRatelbl.setLayoutY(46); // Sets the y location of captureRatelbl to 46
 		captureRatelbl.setFont(fontBold); // Sets the font of captureRatelbl to bold
 		captureRatelbl.setTooltip(new Tooltip("Each species of Pokémon has a catch rate that applies to all its members. When a Poké Ball is\n"
 				+ "thrown at a wild Pokémon, the game uses that Pokémon's catch rate in a formula to determine\n"
 				+ "the chances of catching that Pokémon. Higher catch rates mean that the Pokémon is easier to\n"
 				+ "catch, up to a maximum of 255.")); // Tooltip explaining capture rate
-		catchRateFI.setLayoutX(169); // Sets the x location of catchRateFI to 164
+		catchRateFI.setLayoutX(169); // Sets the x location of catchRateFI to 169
 		catchRateFI.setLayoutY(63); // Sets the y location of catchRateFI to 63
-		baseEggStepslbl.setLayoutX(169); // Sets the x location of baseEggStepslbl to 164
+		baseEggStepslbl.setLayoutX(169); // Sets the x location of baseEggStepslbl to 169
 		baseEggStepslbl.setLayoutY(82); // Sets the y location of baseEggStepslbl to 82
 		baseEggStepslbl.setFont(fontBold); // Sets the font of baseEggStepslbl to bold
 		/** Tooltip explaining Pokémon egg steps */
 		baseEggStepslbl.setTooltip(new Tooltip("Amount of steps it takes to hatch a Pokémon within an egg"));
-		eggCycleFI.setLayoutX(169); // Sets the x location of eggCycleFI to 164
+		eggCycleFI.setLayoutX(169); // Sets the x location of eggCycleFI to 169
 		eggCycleFI.setLayoutY(101); // Sets the y location of eggCycleFI to 101
 		expGrowthlbl.setLayoutX(22); // Sets the x location of expGrowthlbl to 22
 		expGrowthlbl.setLayoutY(193); // Sets the y location of expGrowthlbl to 193
@@ -1000,13 +999,13 @@ public class Main extends Application {
 		expGrowthlbl.setTooltip(new Tooltip("How many experience points it will take to hit the max level, level 100"));
 		expGrowthFI.setLayoutX(22); // Sets the x location of expGrowthFI to 22
 		expGrowthFI.setLayoutY(209); // Sets the y location of expGrowthFI to 209
-		baseHappinesslbl.setLayoutX(169); // Sets the x location of baseHappinesslbl to 164
+		baseHappinesslbl.setLayoutX(169); // Sets the x location of baseHappinesslbl to 169
 		baseHappinesslbl.setLayoutY(193); // Sets the y location of baseHappinesslbl to 193
 		baseHappinesslbl.setFont(fontBold); // Sets the font of baseHappinesslbl to bold
 		baseHappinesslbl.setTooltip(new Tooltip("How much the Pokémon will like you when it joins your team.\n"
 				+ "The lower the value, the more it hates you. The higher the\n"
 				+ "value, the more it love you.")); // Tooltip explaining base happiness/friendship
-		baseHapFI.setLayoutX(169); // Sets the x location of baseHapFI to 164
+		baseHapFI.setLayoutX(169); // Sets the x location of baseHapFI to 169
 		baseHapFI.setLayoutY(209); // Sets the y location of baseHapFI to 209
 		evsEarnedlbl.setLayoutX(22); // Sets the x location of evsEarnedlbl to 22
 		evsEarnedlbl.setLayoutY(227); // Sets the y location of evsEarnedlbl to 227
@@ -1016,28 +1015,28 @@ public class Main extends Application {
 				+ "in the battle against it. This value shows what effort values you will receive after the battle"));
 		evsEarnedFI.setLayoutX(22); // Sets the x location of evsEarnedFI to 22
 		evsEarnedFI.setLayoutY(247); // Sets the y location of evsEarnedFI to 247
-		baseEXPlbl.setLayoutX(169); // Sets the x location of baseEXPlbl to 164
+		baseEXPlbl.setLayoutX(169); // Sets the x location of baseEXPlbl to 169
 		baseEXPlbl.setLayoutY(226); // Sets the y location of baseEXPlbl to 226
 		baseEXPlbl.setFont(fontBold); // Sets the font of baseEXPlbl to bold
 		/** Tooltip explaining Base EXP yield */
 		baseEXPlbl.setTooltip(new Tooltip("Each species of Pokémon has a base experience yield that applies to all its members. When a user\n"
 				+ "defeats a Pokémon, they gain experience, and the higher the EXP Yield, the more experience."));
-		BaseEXPFI.setLayoutX(169); // Sets the x location of BaseEXPFI to 164
+		BaseEXPFI.setLayoutX(169); // Sets the x location of BaseEXPFI to 169
 		BaseEXPFI.setLayoutY(247); // Sets the y location of BaseEXPFI to 247
-		eggGroupslbl.setLayoutX(169); // Sets the x location of eggGroupslbl to 164
+		eggGroupslbl.setLayoutX(169); // Sets the x location of eggGroupslbl to 169
 		eggGroupslbl.setLayoutY(140); // Sets the y location of eggGroupslbl to 140
 		eggGroupslbl.setFont(fontBold); // Sets the font of eggGroupslbl to bold
 		eggGroupslbl.setTooltip(new Tooltip("Egg Groups are categories which determine which Pokémon are able to interbreed. The concept was\n"
 				+ "introduced in Generation II, along with breeding. Similar to types, a Pokémon may belong to either\n"
 				+ "one or two Egg Groups.")); // Tooltip explaining egg groups
-		eggGroup1.setLayoutX(169); // Sets the x location of eggGroup1 to 164
+		eggGroup1.setLayoutX(169); // Sets the x location of eggGroup1 to 169
 		eggGroup1.setLayoutY(157); // Sets the y location of eggGroup1 to 157
-		eggGroup2.setLayoutX(169); // Sets the x location of eggGroup2 to 164
+		eggGroup2.setLayoutX(169); // Sets the x location of eggGroup2 to 169
 		eggGroup2.setLayoutY(176); // Sets the y location of eggGroup2 to 176
 		pokedexTA.setEditable(false); // Sets pokedexTA to NOT be editable
 		pokedexTA.setLayoutX(6); // Sets the x location of pokedexTA to 6
 		pokedexTA.setLayoutY(317); // Sets the y location of pokedexTA to 317
-		pokedexTA.setPrefHeight(225); // Sets the height of pokedexTA to 324
+		pokedexTA.setPrefHeight(225); // Sets the height of pokedexTA to 225
 		pokedexTA.setPrefWidth(894); // Sets the width of pokedexTA to 894
 		pokedexTA.setWrapText(true); // Sets pokedexTA to have its text wrap around
 		EvoTA.setLayoutX(612); // Sets the x location of EvoTA to 612
@@ -1065,7 +1064,7 @@ public class Main extends Application {
 		rockruffAbilityFI.setFont(fontBold); // Sets the font of rockruffAbilityFI to bold
 		rockruffAbilityFI.setTextFill(Color.web("#FF0000")); // Sets the color of rockruffAbilityFI to Red
 		competitivelbl.setLayoutX(16); // Sets the x location of competitivelbl to 16
-		competitivelbl.setLayoutY(552); // Sets the y location of competitivelbl to 527
+		competitivelbl.setLayoutY(552); // Sets the y location of competitivelbl to 552
 		competitivelbl.setFont(new Font("System Bold",20)); // Sets the font of competitivelbl to bold and size 20 font
 		/** Tooltip explaining what competitive section is */
 		competitivelbl.setTooltip(new Tooltip("Links that will take you to Smogon, where you learn competitive sets of the Pokémon"));
@@ -1094,13 +1093,13 @@ public class Main extends Application {
 		abilityComboBox.setLayoutX(379); // Sets the x location of abilityComboBox to 379
 		abilityComboBox.setLayoutY(4); // Sets the y location of abilityComboBox to 4
 		abilityComboBox.setPrefWidth(150); // Sets the width of abilityComboBox to 150
-		abilityNamelbl.setLayoutX(414); // Sets the x location of abilityNamelbl to 440
+		abilityNamelbl.setLayoutX(414); // Sets the x location of abilityNamelbl to 414
 		abilityNamelbl.setLayoutY(33); // Sets the y location of abilityNamelbl to 33
 		abilityNamelbl.setFont(fontBold); // Sets the font of abilityNamelbl to bold
 		abilityNamelbl.setTooltip(new Tooltip("Name of the ability")); // Tooltip for abilitynamelbl
-		abilityNameFI.setLayoutX(414); // Sets the x location of abilityNameFI to 426
+		abilityNameFI.setLayoutX(414); // Sets the x location of abilityNameFI to 414
 		abilityNameFI.setLayoutY(51); // Sets the y location of abilityNameFI to 51
-		gameTextlbl.setLayoutX(414); // Sets the x location of gameTextlbl to 422
+		gameTextlbl.setLayoutX(414); // Sets the x location of gameTextlbl to 414
 		gameTextlbl.setLayoutY(142); // Sets the y location of gameTextlbl to 142
 		gameTextlbl.setFont(fontBold); // Sets the font of gameTextlbl to bold
 		gameTextlbl.setTooltip(new Tooltip("Ability text from the core series games")); // Tooltip explaining that the game text TextArea is
@@ -1129,32 +1128,32 @@ public class Main extends Application {
 		movesBox.setLayoutX(379); // Sets the x location of movesBox to 379
 		movesBox.setLayoutY(4); // Sets the y location of movesBox to 4
 		movesBox.setPrefWidth(150); // Sets the width of movesBox to 150
-		moveNamelbl.setLayoutX(130); // Sets the x location of moveNamelbl to 131
+		moveNamelbl.setLayoutX(130); // Sets the x location of moveNamelbl to 130
 		moveNamelbl.setLayoutY(30); // Sets the y location of moveNamelbl to 30
 		moveNamelbl.setFont(fontBold); // Sets the font of moveNamelbl to bold
 		moveNamelbl.setTooltip(new Tooltip("Name of the move")); // Tooltip for moveNamelbl
-		moveNameFI.setLayoutX(130); // Sets the x location of moveNameFI to 117
+		moveNameFI.setLayoutX(130); // Sets the x location of moveNameFI to 130
 		moveNameFI.setLayoutY(48); // Sets the y location of moveNameFI to 48
 		moveTypelbl.setLayoutX(424); // Sets the x location of moveTypelbl to 424
-		moveTypelbl.setLayoutY(30); // Sets the y location of moveTypelbl to 31
+		moveTypelbl.setLayoutY(30); // Sets the y location of moveTypelbl to 30
 		moveTypelbl.setFont(fontBold); // Sets the font of moveTypelbl to bold
 		moveTypelbl.setTooltip(new Tooltip("Type of the move")); // Tooltip for moveTypelbl
 		moveTypePicView.setFitHeight(12); // Sets the height of moveTypePicView to 12
 		moveTypePicView.setFitWidth(32); // Sets the width of moveTypePicView to 32
-		moveTypePicView.setLayoutX(440); // Sets the x location of moveTypePicView to 437
+		moveTypePicView.setLayoutX(440); // Sets the x location of moveTypePicView to 440
 		moveTypePicView.setLayoutY(51); // Sets the y location of moveTypePicView to 51
 		categorylbl.setLayoutX(648); // Sets the x location of categorylbl to 648
-		categorylbl.setLayoutY(30); // Sets the y location of categorylbl to 31
+		categorylbl.setLayoutY(30); // Sets the y location of categorylbl to 30
 		categorylbl.setFont(fontBold); // Sets the font of categorylbl to bold
 		categorylbl.setTooltip(new Tooltip("The category or kind of a move is an element of said move that determines the kind of damage it\n"
 				+ "deals.")); // Tooltip explaining what a move category is
 		categoryPicSmallView.setFitHeight(14); // Sets the height of categoryPicSmallView to 14
 		categoryPicSmallView.setFitWidth(28); // Sets the width of categoryPicSmallView to 28
-		categoryPicSmallView.setLayoutX(675); // Sets the x location of categoryPicSmallView to 658
+		categoryPicSmallView.setLayoutX(675); // Sets the x location of categoryPicSmallView to 675
 		categoryPicSmallView.setLayoutY(50); // Sets the y location of categoryPicSmallView to 50
 		categorypicView.setFitHeight(28); // Sets the height of categorypicView to 28
 		categorypicView.setFitWidth(28); // Sets the width of categorypicView to 28
-		categorypicView.setLayoutX(675); // Sets the x location of categorypicView to 658
+		categorypicView.setLayoutX(675); // Sets the x location of categorypicView to 675
 		categorypicView.setLayoutY(50); // Sets the y location of categorypicView to 50
 		powerPointslbl.setLayoutX(51); // Sets the x location of powerPointslbl to 51
 		powerPointslbl.setLayoutY(88); // Sets the y location of powerPointslbl to 88
@@ -1177,7 +1176,7 @@ public class Main extends Application {
 		/** Tooltip explaining what move accuracy is */
 		accuracylbl.setTooltip(new Tooltip("Accuracy is an aspect of moves that, in conjunction with the user's in-battle accuracy stat and\n"
 				+ "the target's evasion stat, determines how reliable they can hit their target."));
-		moveAccuracyFI.setLayoutX(565); // Sets the x location of moveAccuracyFI to 559
+		moveAccuracyFI.setLayoutX(565); // Sets the x location of moveAccuracyFI to 565
 		moveAccuracyFI.setLayoutY(106); // Sets the y location of moveAccuracyFI to 106
 		speedPrioritylbl.setLayoutX(724); // Sets the x location of speedPrioritylbl to 724
 		speedPrioritylbl.setLayoutY(88); // Sets the y location of speedPrioritylbl to 88
@@ -1217,34 +1216,34 @@ public class Main extends Application {
 		movesTab.setContent(moveAnchor); // Sets the contents of the moves Tab with moveAnchor
 		statCalcAnchor.setPrefHeight(180); // Sets the height of statCalcAnchor to 180
 		statCalcAnchor.setPrefWidth(200); // Sets the width of statCalcAnchor to 200
-		hplbl.setLayoutX(327); // Sets the x location of hplbl to 332
+		hplbl.setLayoutX(327); // Sets the x location of hplbl to 327
 		hplbl.setLayoutY(180); // Sets the y location of hplbl to 180
 		hplbl.setFont(fontBold); // Sets the font of hplbl to bold
 		hplbl.setTooltip(new Tooltip("The Hit Points, or HP for short in both Japanese and English, determine how much damage a Pokémon can\n"
 				+ "receive before fainting. Many other game mechanics, such as Pokémon Centers, Substitute, Leftovers, and\n"
 				+ "Pain Split, can decrease or restore HP. Lost HP is often not automatically restored at the end of a battle,\n"
 				+ "so Pokémon can enter another battle without their full HP. ")); // Tooltip explaining the Hit Point stat
-		attacklbl.setLayoutX(307); // Sets the x location of attacklbl to 313
+		attacklbl.setLayoutX(307); // Sets the x location of attacklbl to 307
 		attacklbl.setLayoutY(207); // Sets the y location of attacklbl to 207
 		attacklbl.setFont(fontBold); // Sets the font of attacklbl to bold
 		attacklbl.setTooltip(new Tooltip("The Attack stat, or informally Physical Attack, partly determines how much damage a Pokémon deals\n"
 				+ "when using a physical move.")); // Tooltip explaining the Attack stat
-		defenselbl.setLayoutX(300); // Sets the x location to 304
+		defenselbl.setLayoutX(300); // Sets the x location to 300
 		defenselbl.setLayoutY(234); // Sets the y location to 234
 		defenselbl.setFont(fontBold); // Sets the font of defenselbl to bold
 		defenselbl.setTooltip(new Tooltip("The Defense stat, or informally Physical Defense, partly determines how much damage a Pokémon\n"
 				+ "receives when it is hit with a physical move.")); // Tooltip explaining the Defense stat
-		spAtklbl.setLayoutX(265); // Sets the x location of spAtklbl to 273
+		spAtklbl.setLayoutX(265); // Sets the x location of spAtklbl to 265
 		spAtklbl.setLayoutY(261); // Sets the y location of spAtklbl to 261
 		spAtklbl.setFont(fontBold); // Sets the font of spAtklbl to bold
 		spAtklbl.setTooltip(new Tooltip("The Special Attack stat, or Sp. Atk for short, partly determines how much damage a Pokémon deals when\n"
 				+ "using a special move.")); // Tooltip explaining the Special Attack stat
-		spDeflbl.setLayoutX(257); // Sets the x location of spDeflbl to 264
+		spDeflbl.setLayoutX(257); // Sets the x location of spDeflbl to 257
 		spDeflbl.setLayoutY(288); // Sets the y location of spDeflbl to 288
 		spDeflbl.setFont(fontBold); // Sets the font of spDeflbl to bold
 		spDeflbl.setTooltip(new Tooltip("The Special Defense stat, or Sp. Def for short, partly determines how much damage a Pokémon receives\n"
 				+ "when it is hit with a special move.")); // Tooltip explaining the Special Defense stat
-		speedlbl.setLayoutX(310); // Sets the x location of speedlbl to 315
+		speedlbl.setLayoutX(310); // Sets the x location of speedlbl to 310
 		speedlbl.setLayoutY(315); // Sets the y location of speedlbl to 315
 		speedlbl.setFont(fontBold); // Sets the font of speedlbl to bold
 		speedlbl.setTooltip(new Tooltip("The Speed stat determines the order of Pokémon that can act in battle. If Pokémon are moving with the\n"
@@ -1379,7 +1378,7 @@ public class Main extends Application {
 		totalStatsTF.setLayoutY(338); // Sets the y location of totalStatsTF to 338
 		totalStatsTF.setPrefHeight(26); // Sets the height of totalStatsTF to 26
 		totalStatsTF.setPrefWidth(42); // Sets the width of totalStatsTF to 42
-		totallbl.setLayoutX(315); // Sets the x location of totallbl to 320
+		totallbl.setLayoutX(315); // Sets the x location of totallbl to 315
 		totallbl.setLayoutY(342); // Sets the y location of totallbl to 342
 		totallbl.setFont(fontBold); // Sets the font of totallbl to bold
 		baselbl.setLayoutX(360); // Sets the x location of baselbl to 360
@@ -1455,7 +1454,7 @@ public class Main extends Application {
 		itemPocketlbl.setTooltip(new Tooltip("Pocket of where the item will go in your bag")); // Tooltip explaining what an item pocket it
 		itemNameFI.setLayoutX(198); // Sets the x location of itemNameFI to 198
 		itemNameFI.setLayoutY(41); // Sets the y location of itemNameFI to 41
-		itemPocketFI.setLayoutX(636); // Sets the x location of itemPocketFI to 636
+		itemPocketFI.setLayoutX(648); // Sets the x location of itemPocketFI to 648
 		itemPocketFI.setLayoutY(41); // Sets the y location of itemPocketFI to 41
 		itemImageView.setFitHeight(36); // Sets the height of itemImageView to 36
 		itemImageView.setFitWidth(36); // Sets the width of itemImageView to 36
@@ -1495,7 +1494,7 @@ public class Main extends Application {
 		loginAnchor.setMinWidth(100); // Sets the mid width of loginAnchor to 100
 		loginAnchor.setPrefHeight(206); // Sets the pref height of loginAnchor to 206
 		loginAnchor.setPrefWidth(258); // Sets the pref width of loginAnchor to 258
-		welcomeTolbl.setLayoutX(10); // Sets the x location of welcomeTolbl to 20
+		welcomeTolbl.setLayoutX(10); // Sets the x location of welcomeTolbl to 10
 		welcomeTolbl.setLayoutY(14); // Sets the y location of welcomeTolbl to 14
 		welcomeTolbl.setFont(new Font("System Bold",20)); // Sets the font of welcomeTolbl to System Bold 20 size
 		pleaseEnterlbl.setLayoutX(44); // Sets the x location of pleaseEnterlbl to 44
@@ -1552,8 +1551,8 @@ public class Main extends Application {
 		createAnchor.getChildren().addAll(createAccountlbl,firstNamelbl,firstNameFI,lastNamelbl,lastNameFI,createUNlbl,createUNFI,createPWlbl,
 				createPWFI,createAccountbtn,cancelbtnCA); // Adds everything to the createAnchor
 		createAccount.getChildren().add(createAnchor); // Adds everything to the createAccount VBox
-		loginStage.getIcons().add(new Image("icon/pokeballIcon.png"));
-		createStage.getIcons().add(new Image("icon/pokeballIcon.png"));
+		loginStage.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds the icon to the loginStage
+		createStage.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds the icon to the createStage
 		
 		pokemonNameBox.setOnAction(e -> { // Event that starts when a user selects a Pokémon from the ComboBox.
 			getPokemon(); // Calls the pokemonNameBox
@@ -1597,7 +1596,7 @@ public class Main extends Application {
 			loginStage.show(); // Opens the loginStage scene
 		}); // End of createStage close event
 		
-		loginbtn.setOnAction(e -> {
+		loginbtn.setOnAction(e -> { // Event that logins in the user
 			Login(); // Calls to the Login method
 		}); // End loginbtn event
 		
@@ -1613,7 +1612,7 @@ public class Main extends Application {
 			openCAWindow(); // Calls to the openCAWindow method
 		}); // Ends createAccount event
 		
-		createAccountbtn.setOnAction(e -> {
+		createAccountbtn.setOnAction(e -> { // Event that creates the user's account
 			CreateAccount(); // Calls to the CreateAccount method
 		}); // End createAccountbtn event
 		
@@ -1624,11 +1623,11 @@ public class Main extends Application {
 			loginStage.show(); // Opens loginStage stage
 		}); // Ends cancelbtnCA event
 		
-		menuitem1.setOnAction(e -> {
+		menuitem1.setOnAction(e -> { // Event that saves a selected Pokémon's page
 			saveDexPage(); // Calls to the saveDexPage method
 		}); // End of menuitem1 event
 		
-		menuitem4.setOnAction(e -> {
+		menuitem4.setOnAction(e -> { // Event that clears out a saved dex page, if there is one
 			clearDexPage(); // Calls to the clearDexPage method
 		}); // End menuitem4 event
 		
@@ -1641,11 +1640,10 @@ public class Main extends Application {
 		}); // Ends gen8link event
 		
 		menuitem2.setOnAction( e-> { // Event that closes the program
-			mainStage.close();
+			mainStage.close(); // Closes the program
 			try { // Try block for connection
 				connection.close(); // Closes database connection
 			} catch (SQLException e1) { // Catch block, should not happen
-				e1.printStackTrace();
 			} // End of catch
 		}); // Ends menuitem2 event
 		
@@ -1657,9 +1655,9 @@ public class Main extends Application {
 			openAbout(); // Goes to the openAbout() method
 		}); // Ends menuitem5 event
 		
-		menuitem6.setOnAction(e -> {
-			openCredits();
-		});
+		menuitem6.setOnAction(e -> { // Event that opens the credits section
+			openCredits(); // Goes to the openCredits() method
+		}); // Ednds menuitem6 event
 	} // End of start method
 	
 	/** Method that shows Credits for the program */
@@ -1676,11 +1674,11 @@ public class Main extends Application {
         bulbapediaLogo.setLayoutX(10); // Sets the x location of bulbapediaLogo to 10
         bulbapediaLogo.setLayoutY(10); // Sets the y location of bulbapediaLogo to 10
         ImageView serebiiLogo = new ImageView(new Image("logos/serebii.gif")); // ImageView that holds Serebii's "logo"
-        serebiiLogo.setFitHeight(100); // Sets the height of serebiiLogo to 50
-        serebiiLogo.setFitWidth(100); // Sets the width of serebiiLogo to 50
+        serebiiLogo.setFitHeight(100); // Sets the height of serebiiLogo to 100
+        serebiiLogo.setFitWidth(100); // Sets the width of serebiiLogo to 100
         serebiiLogo.setOpacity(0.5); // Sets the opacity of serebiiLogo to 50%
-        serebiiLogo.setLayoutX(300); // Sets the x location of serebiiLogo to 350
-        serebiiLogo.setLayoutY(0); // Sets the y location of serebiiLogo to 10
+        serebiiLogo.setLayoutX(300); // Sets the x location of serebiiLogo to 300
+        serebiiLogo.setLayoutY(0); // Sets the y location of serebiiLogo to 0
         ImageView nintendoLogo = new ImageView(new Image("logos/nintendo.png")); // ImageView that holds Nintendo's logo
         nintendoLogo.setFitHeight(35); // Sets the height of nintendoLogo to 35
         nintendoLogo.setFitWidth(85); // Sets the width of nintendoLogo to 85
@@ -1691,17 +1689,17 @@ public class Main extends Application {
         pokemonCompanyLogo.setFitHeight(25); // Sets the height of pokemonCompanyLogo to 25
         pokemonCompanyLogo.setFitWidth(100); // Sets the width of pokemonCompanyLogo to 100
         pokemonCompanyLogo.setOpacity(0.5); // Sets the opacity of pokemonCompanyLogo to 50%
-        pokemonCompanyLogo.setLayoutX(290); // Sets the x location of pokemonCompanyLogo to 285
+        pokemonCompanyLogo.setLayoutX(290); // Sets the x location of pokemonCompanyLogo to 290
         pokemonCompanyLogo.setLayoutY(125); // Sets the y location of pokemonCompanyLogo to 215
         ImageView gameFreakLogo = new ImageView(new Image("logos/GameFreak.png")); // ImageView that hold's Game Freak's Logo
         gameFreakLogo.setFitHeight(50); // Sets the height of gameFreaklogo to 50
         gameFreakLogo.setFitWidth(75); // Sets the width of gameFreaklogo to 75
         gameFreakLogo.setOpacity(0.5); // Sets the opacity of gameFreaklogo to 50%
-        gameFreakLogo.setLayoutX(0); // Sets the x location of gameFreaklogo to 160
-        gameFreakLogo.setLayoutY(95); // Sets the y location of gameFreaklogo to 85
+        gameFreakLogo.setLayoutX(0); // Sets the x location of gameFreaklogo to 0
+        gameFreakLogo.setLayoutY(95); // Sets the y location of gameFreaklogo to 95
         Button okButton = new Button("OK"); // Creates a new button called okButton
         okButton.setLayoutX(175); // Sets the x location of okButton to 175
-        okButton.setLayoutY(210); // Sets the y location of okButton to 200
+        okButton.setLayoutY(210); // Sets the y location of okButton to 210
         Label oklbl = new Label("Bulbapedia and Serebii for their pages about the\nPokémon, moves, abilities, and items\nSmogon for their "
         		+ "competitive pages\n\n\nAll rights go to "
         		+ "Game Freak, Nintendo, and the Pokémon\nCompany\n\n\nThe Brookdale Community College Computer Science\nLab/Club for helping me"
@@ -1711,16 +1709,16 @@ public class Main extends Application {
         oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
         ImageView brookdaleLogo = new ImageView(new Image("logos/brookdale.jpg")); // ImageView that holds Brookdale's logo
         brookdaleLogo.setFitHeight(50); // Sets the height of brookdaleLogo to 50
-        brookdaleLogo.setFitWidth(100); // Sets the width of brookdaleLogo to 50
+        brookdaleLogo.setFitWidth(100); // Sets the width of brookdaleLogo to 100
         brookdaleLogo.setOpacity(0.5); // Sets the opacity of brookdaleLogo to 50%
-        brookdaleLogo.setLayoutX(285); // Sets the x location of brookdaleLogo to 50
-        brookdaleLogo.setLayoutY(190); // Sets the y location of brookdaleLogo to 95
+        brookdaleLogo.setLayoutX(285); // Sets the x location of brookdaleLogo to 285
+        brookdaleLogo.setLayoutY(190); // Sets the y location of brookdaleLogo to 190
         ImageView smogonLogo = new ImageView(new Image("logos/smogon.png")); // ImageView that hold's Smogon's logo
         smogonLogo.setFitHeight(50); // Sets the height of smogonLogo to 50
         smogonLogo.setFitWidth(50); // Sets the width of smogonLogo to 50
         smogonLogo.setOpacity(0.5); // Sets the opacity of smogonLogo to 50%
-        smogonLogo.setLayoutX(275);
-        smogonLogo.setLayoutY(50);
+        smogonLogo.setLayoutX(275); // Sets the x location of smogonLogo to 275
+        smogonLogo.setLayoutY(50); // Sets the y location of smogonLogo to 50
         /** Adds everything to the creditsAnchor */
         creditsAnchor.getChildren().addAll(okButton,oklbl,bulbapediaLogo,serebiiLogo,nintendoLogo,pokemonCompanyLogo,gameFreakLogo,
         		brookdaleLogo, smogonLogo);
@@ -1728,7 +1726,7 @@ public class Main extends Application {
         Scene dialogScene = new Scene(creditvbox, 400, 250); // Creates a new scene called dialogScene
         credits.setScene(dialogScene); // Sets the dialogScene scene to credits stage
         credits.setTitle("Credits"); // Sets the title of credits
-        credits.getIcons().add(new Image("icon/pokeballIcon.png"));
+        credits.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds an icon to credits
         credits.show(); // Shows credits stage
         credits.setResizable(false); // Makes sure that credits can't be resized
         okButton.setOnAction(e2 -> { // Event that closes credits
@@ -1736,35 +1734,38 @@ public class Main extends Application {
         }); // End okButton event
 	} // End of method
 	
+	/** Method that shows the About for the program */
 	private void openAbout() {
-		final Stage about = new Stage(); // Create a new stage called ohno
+		final Stage about = new Stage(); // Create a new stage called about
 		about.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
 		about.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
         VBox aboutvbox = new VBox(); // Create a VBox called ohnovbox
-        AnchorPane aboutAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+        AnchorPane aboutAnchor = new AnchorPane(); // Creates an AnchorPane called aboutAnchor
         Button okButton = new Button("OK"); // Creates a new button called okButton
-        okButton.setLayoutX(135); // Sets the x location of okButton to 81
-        okButton.setLayoutY(100); // Sets the y location of okButton to 56
+        okButton.setLayoutX(135); // Sets the x location of okButton to 135
+        okButton.setLayoutY(100); // Sets the y location of okButton to 100
         Label oklbl = new Label("This is a program meant for people who want to learn\nabout a specific Pokémon, and learn about more than\n"
         		+ "just their stats. Also, this is a product used to learn\nabout a specific move, ability, or item.");
-        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+        oklbl.setLayoutX(10); // Sets the x location of oklbl to 10
         oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
         aboutAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
         aboutvbox.getChildren().add(aboutAnchor); // Adds everything to the ohnovbox
         Scene dialogScene = new Scene(aboutvbox, 300, 150); // Creates a new scene called dialogScene
         about.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
-        about.setTitle("About");
-        about.getIcons().add(new Image("icon/pokeballIcon.png"));
+        about.setTitle("About"); // Sets the title of about to About
+        about.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds an icon to about
         about.show(); // Shows ohno stage
         about.setResizable(false); // Makes sure that ohno can't be resized
         okButton.setOnAction(e2 -> { // Event that closes ohno
         	about.close(); // Closes ohno
         }); // End okButton event
-	}
+	} // End of method
+	
 	/** Method that leads to the online document */
 	private void openDocument() {
 		getHostServices().showDocument("https://1drv.ms/w/s!ApaLfDgCi8U2giaLD7svvLeMmF63?e=nQe1sL");
-	}
+	} // End of method
+	
 	/** Method that calculates the stats of a Pokémon */
 	public void statCalculator() {
 		attacklbl.setTextFill(Color.web("#000000")); // Sets the color of attacklbl to black
@@ -1775,26 +1776,27 @@ public class Main extends Application {
 		try { // try block for the whole event, and to make sure no errors occur
 			/** If the user inputs a level higher than 100 or lower than 1..., it says no you can't do that */
 			if (Integer.parseInt(levelTF.getText()) >= 101 || Integer.parseInt(levelTF.getText()) <= 0) {
-				final Stage levelProb = new Stage(); // Create a new stage called ohno
+				final Stage levelProb = new Stage(); // Create a new stage called levelProb
 				levelProb.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
 				levelProb.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
-		        VBox levelvbox = new VBox(); // Create a VBox called ohnovbox
-		        AnchorPane levelAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+		        VBox levelvbox = new VBox(); // Create a VBox called levelvbox
+		        AnchorPane levelAnchor = new AnchorPane(); // Creates an AnchorPane called levelAnchor
 		        Button okButton = new Button("OK"); // Creates a new button called okButton
-		        okButton.setLayoutX(125); // Sets the x location of okButton to 81
-		        okButton.setLayoutY(40); // Sets the y location of okButton to 56
+		        okButton.setLayoutX(125); // Sets the x location of okButton to 125
+		        okButton.setLayoutY(40); // Sets the y location of okButton to 40
+		        /** Label that says Level cannot be higher than 100 or lower than 1 */
 		        Label oklbl = new Label("Level cannot be higher than 100 or lower than 1");
-		        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+		        oklbl.setLayoutX(10); // Sets the x location of oklbl to 10
 		        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
-		        levelAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
-		        levelvbox.getChildren().add(levelAnchor); // Adds everything to the ohnovbox
+		        levelAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the levelAnchor
+		        levelvbox.getChildren().add(levelAnchor); // Adds everything to the levelvbox
 		        Scene dialogScene = new Scene(levelvbox, 275, 75); // Creates a new scene called dialogScene
-		        levelProb.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
-		        levelProb.getIcons().add(new Image("icon/pokeballIcon.png"));
-		        levelProb.show(); // Shows ohno stage
-		        levelProb.setResizable(false); // Makes sure that ohno can't be resized
-		        okButton.setOnAction(e2 -> { // Event that closes ohno
-		        	levelProb.close(); // Closes ohno
+		        levelProb.setScene(dialogScene); // Sets the dialogScene scene to levelProb stage
+		        levelProb.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to levelProb
+		        levelProb.show(); // Shows levelProb stage
+		        levelProb.setResizable(false); // Makes sure that levelProb can't be resized
+		        okButton.setOnAction(e2 -> { // Event that closes levelProb
+		        	levelProb.close(); // Closes levelProb
 		        }); // End okButton event
 			} // End if
 			/** If the user input an IV value higher than 31 or lower than 0, it says that you can't do that */
@@ -1807,23 +1809,24 @@ public class Main extends Application {
 				final Stage IVProb = new Stage(); // Create a stage called IVProb
 				IVProb.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
 				IVProb.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
-			    VBox ivVbox = new VBox(20); // Create a VBox called dialogVbox
-		        AnchorPane ivAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+			    VBox ivVbox = new VBox(20); // Create a VBox called ivVbox
+		        AnchorPane ivAnchor = new AnchorPane(); // Creates an AnchorPane called ivAnchor
 		        Button okButton = new Button("OK"); // Creates a new button called okButton
-		        okButton.setLayoutX(115); // Sets the x location of okButton to 81
-		        okButton.setLayoutY(40); // Sets the y location of okButton to 56
+		        okButton.setLayoutX(115); // Sets the x location of okButton to 115
+		        okButton.setLayoutY(40); // Sets the y location of okButton to 40
+		        /** Label that says IVs cannot be higher than 31 or lower than 0 */
 		        Label oklbl = new Label("IVs cannot be higher than 31 or lower than 0");
-		        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+		        oklbl.setLayoutX(10); // Sets the x location of oklbl to 10
 		        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
-		        ivAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
-		        ivVbox.getChildren().add(ivAnchor); // Adds everything to the ohnovbox
+		        ivAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ivAnchor
+		        ivVbox.getChildren().add(ivAnchor); // Adds everything to the ivVbox
 		        Scene dialogScene = new Scene(ivVbox, 260, 75); // Creates a new scene called dialogScene
-		        IVProb.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
-		        IVProb.getIcons().add(new Image("icon/pokeballIcon.png"));
-		        IVProb.show(); // Shows ohno stage
-		        IVProb.setResizable(false); // Makes sure that ohno can't be resized
-		        okButton.setOnAction(e2 -> { // Event that closes ohno
-		        	IVProb.close(); // Closes ohno
+		        IVProb.setScene(dialogScene); // Sets the dialogScene scene to IVProb stage
+		        IVProb.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to IVProb
+		        IVProb.show(); // Shows IVProb stage
+		        IVProb.setResizable(false); // Makes sure that IVProb can't be resized
+		        okButton.setOnAction(e2 -> { // Event that closes IVProb
+		        	IVProb.close(); // Closes IVProb
 		        }); // End okButton event
 			} // End else if
 			/** If the user input an EV value higher than 252 or lower than 0, it says you can't do that */
@@ -1836,23 +1839,24 @@ public class Main extends Application {
 				final Stage EVProb = new Stage(); // Create a stage called EVProb
 				EVProb.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
 				EVProb.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
-			    VBox evVbox = new VBox(20); // Create a VBox called dialogVbox
-		        AnchorPane evAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+			    VBox evVbox = new VBox(20); // Create a VBox called evVbox
+		        AnchorPane evAnchor = new AnchorPane(); // Creates an AnchorPane called evAnchor
 		        Button okButton = new Button("OK"); // Creates a new button called okButton
-		        okButton.setLayoutX(115); // Sets the x location of okButton to 81
-		        okButton.setLayoutY(40); // Sets the y location of okButton to 56
+		        okButton.setLayoutX(115); // Sets the x location of okButton to 115
+		        okButton.setLayoutY(40); // Sets the y location of okButton to 40
+		        /** Label that says EVs cannot be higher than 252 or lower than 0 */
 		        Label oklbl = new Label("EVs cannot be higher than 252 or lower than 0");
-		        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+		        oklbl.setLayoutX(10); // Sets the x location of oklbl to 10
 		        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
-		        evAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
-		        evVbox.getChildren().add(evAnchor); // Adds everything to the ohnovbox
+		        evAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the evAnchor
+		        evVbox.getChildren().add(evAnchor); // Adds everything to the evVbox
 		        Scene dialogScene = new Scene(evVbox, 270, 75); // Creates a new scene called dialogScene
-		        EVProb.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
-		        EVProb.getIcons().add(new Image("icon/pokeballIcon.png"));
-		        EVProb.show(); // Shows ohno stage
-		        EVProb.setResizable(false); // Makes sure that ohno can't be resized
-		        okButton.setOnAction(e2 -> { // Event that closes ohno
-		        	EVProb.close(); // Closes ohno
+		        EVProb.setScene(dialogScene); // Sets the dialogScene scene to EVProb stage
+		        EVProb.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to EVProb
+		        EVProb.show(); // Shows EVProb stage
+		        EVProb.setResizable(false); // Makes sure that EVProb can't be resized
+		        okButton.setOnAction(e2 -> { // Event that closes EVProb
+		        	EVProb.close(); // Closes EVProb
 		        }); // End okButton event
 			} // end else if
 			else { // Else...
@@ -1890,22 +1894,23 @@ public class Main extends Application {
 				    tooManyEVs.initModality(Modality.APPLICATION_MODAL); // // Specifies the modality for this stage.
 				    tooManyEVs.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
 				    VBox dialogVbox = new VBox(20); // Creates a VBox called dialogVbox
-			        AnchorPane toomanyAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+			        AnchorPane toomanyAnchor = new AnchorPane(); // Creates an AnchorPane called toomanyAnchor
 			        Button okButton = new Button("OK"); // Creates a new button called okButton
-			        okButton.setLayoutX(65); // Sets the x location of okButton to 81
-			        okButton.setLayoutY(40); // Sets the y location of okButton to 56
+			        okButton.setLayoutX(65); // Sets the x location of okButton to 65
+			        okButton.setLayoutY(40); // Sets the y location of okButton to 40
+			        /** Label that says EV total cannot exceed 510 */
 			        Label oklbl = new Label("EV total cannot exceed 510");
-			        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+			        oklbl.setLayoutX(10); // Sets the x location of oklbl to 10
 			        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
-			        toomanyAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
-			        dialogVbox.getChildren().add(toomanyAnchor); // Adds everything to the ohnovbox
+			        toomanyAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the toomanyAnchor
+			        dialogVbox.getChildren().add(toomanyAnchor); // Adds everything to the dialogVbox
 			        Scene dialogScene = new Scene(dialogVbox, 165, 75); // Creates a new scene called dialogScene
-				    tooManyEVs.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
-				    tooManyEVs.getIcons().add(new Image("icon/pokeballIcon.png"));
-				    tooManyEVs.show(); // Shows ohno stage
-				    tooManyEVs.setResizable(false); // Makes sure that ohno can't be resized
-			        okButton.setOnAction(e2 -> { // Event that closes ohno
-					    tooManyEVs.close(); // Closes ohno
+				    tooManyEVs.setScene(dialogScene); // Sets the dialogScene scene to tooManyEVs stage
+				    tooManyEVs.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to tooManyEVs
+				    tooManyEVs.show(); // Shows tooManyEVs stage
+				    tooManyEVs.setResizable(false); // Makes sure that tooManyEVs can't be resized
+			        okButton.setOnAction(e2 -> { // Event that closes tooManyEVs
+					    tooManyEVs.close(); // Closes tooManyEVs
 			        }); // End okButton event
 				} // End if
 				else { // Else...
@@ -2135,23 +2140,23 @@ public class Main extends Application {
 			final Stage notNumber = new Stage(); // Creates a new stage called notNumber
 			notNumber.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
 			notNumber.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
-		    VBox notnumVbox = new VBox(20); // Creates a VBox called dialogVbox
-	        AnchorPane notnumAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+		    VBox notnumVbox = new VBox(20); // Creates a VBox called notnumVbox
+	        AnchorPane notnumAnchor = new AnchorPane(); // Creates an AnchorPane called notnumAnchor
 	        Button okButton = new Button("OK"); // Creates a new button called okButton
-	        okButton.setLayoutX(100); // Sets the x location of okButton to 81
-	        okButton.setLayoutY(40); // Sets the y location of okButton to 56
+	        okButton.setLayoutX(100); // Sets the x location of okButton to 100
+	        okButton.setLayoutY(40); // Sets the y location of okButton to 40
 	        Label oklbl = new Label("Make sure all fields are numbers/filled");
-	        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+	        oklbl.setLayoutX(10); // Sets the x location of oklbl to 10
 	        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
-	        notnumAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
-	        notnumVbox.getChildren().add(notnumAnchor); // Adds everything to the ohnovbox
+	        notnumAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the notnumAnchor
+	        notnumVbox.getChildren().add(notnumAnchor); // Adds everything to the notnumVbox
 	        Scene dialogScene = new Scene(notnumVbox, 225, 75); // Creates a new scene called dialogScene
-	        notNumber.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
-	        notNumber.getIcons().add(new Image("icon/pokeballIcon.png"));
-	        notNumber.show(); // Shows ohno stage
-	        notNumber.setResizable(false); // Makes sure that ohno can't be resized
-	        okButton.setOnAction(e2 -> { // Event that closes ohno
-	        	notNumber.close(); // Closes ohno
+	        notNumber.setScene(dialogScene); // Sets the dialogScene scene to notNumber stage
+	        notNumber.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to notNumber
+	        notNumber.show(); // Shows notNumber stage
+	        notNumber.setResizable(false); // Makes sure that notNumber can't be resized
+	        okButton.setOnAction(e2 -> { // Event that closes notNumber
+	        	notNumber.close(); // Closes notNumber
 	        }); // End okButton event
 		} // End catch block
 	} // End of method
@@ -2168,6 +2173,7 @@ public class Main extends Application {
 	
 	/** Method that gets info about the Pokémon selected */
 	public void getPokemon() {
+		menuitem1.setVisible(true); // Enables menuitem1
 		formBox.setValue(null); // If the Pokémon had forms in formBox, they're gone now
 		otherFormsList.clear(); // Resets the otherFormsList ObservableList
 		rockruffAbilityFI.setVisible(false); // Hides the label that reads Rockruff's 4th ability
@@ -2226,8 +2232,6 @@ public class Main extends Application {
 			hiddenAbilityFI.setTextFill(Color.web("#000000")); // Set the color of hiddenAbilityFI to black
 			ability2FI.setFont(Font.font("System Bold", FontWeight.NORMAL, 12)); // Sets the font of ability2 to regular
 			ability2FI.setTextFill(Color.web("#000000")); // Sets the color of ability2FI to black
-			menuitem1.setDisable(false); // Enables menuitem1
-			menuitem4.setDisable(false); // Enables menuitem4
 			createPokemon.next(); // Begins grabbing data for that specific Pokémon
 			HPImageView.setImage(null); // Sets HPImageView to show nothing
 			shinyCheck.setVisible(true); // Makes shinyCheck appear
@@ -2536,23 +2540,24 @@ public class Main extends Application {
 				final Stage tooBig = new Stage(); // Create a new stage called dialog
 				tooBig.initModality(Modality.APPLICATION_MODAL); // Specifies the modality for this stage.
 				tooBig.initOwner(mainStage); // Specifies the owner Window for this stage, or null for a top-level, unowned stage.
-                VBox toobiggVbox = new VBox(20); // Create a new VBox called dialogVbox
-		        AnchorPane toobigAnchor = new AnchorPane(); // Creates an AnchorPane called ohnoAnchor
+                VBox toobiggVbox = new VBox(20); // Create a new VBox called toobiggVbox
+		        AnchorPane toobigAnchor = new AnchorPane(); // Creates an AnchorPane called toobigAnchor
 		        Button okButton = new Button("OK"); // Creates a new button called okButton
-		        okButton.setLayoutX(135); // Sets the x location of okButton to 81
-		        okButton.setLayoutY(100); // Sets the y location of okButton to 56
+		        okButton.setLayoutX(120); // Sets the x location of okButton to 120
+		        okButton.setLayoutY(40); // Sets the y location of okButton to 40
+		        /** Label that says Value cannot be lower than 1 or higher than 890 */
 		        Label oklbl = new Label("Value cannot be lower than 1 or higher than 890");
-		        oklbl.setLayoutX(10); // Sets the x location of oklbl to 32
+		        oklbl.setLayoutX(10); // Sets the x location of oklbl to 10
 		        oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
-		        toobigAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the ohnoAnchor
-		        toobiggVbox.getChildren().add(toobigAnchor); // Adds everything to the ohnovbox
-		        Scene dialogScene = new Scene(toobiggVbox, 300, 150); // Creates a new scene called dialogScene
-		        tooBig.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
-		        tooBig.getIcons().add(new Image("icon/pokeballIcon.png"));
-		        tooBig.show(); // Shows ohno stage
-		        tooBig.setResizable(false); // Makes sure that ohno can't be resized
-		        okButton.setOnAction(e2 -> { // Event that closes ohno
-		        	tooBig.close(); // Closes ohno
+		        toobigAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to the toobigAnchor
+		        toobiggVbox.getChildren().add(toobigAnchor); // Adds everything to the toobiggVbox
+		        Scene dialogScene = new Scene(toobiggVbox, 275, 75); // Creates a new scene called dialogScene
+		        tooBig.setScene(dialogScene); // Sets the dialogScene scene to tooBig stage
+		        tooBig.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to tooBig
+		        tooBig.show(); // Shows tooBig stage
+		        tooBig.setResizable(false); // Makes sure that tooBig can't be resized
+		        okButton.setOnAction(e2 -> { // Event that closes tooBig
+		        	tooBig.close(); // Closes tooBig
 		        }); // End okButton event
 			} // End
 			else { // Else
@@ -2607,8 +2612,6 @@ public class Main extends Application {
 				hiddenAbilityFI.setTextFill(Color.web("#000000")); // Set the color of hiddenAbilityFI to black
 				ability2FI.setFont(Font.font("System Bold", FontWeight.NORMAL, 12)); // Sets the font of ability2 to regular
 				ability2FI.setTextFill(Color.web("#000000")); // Sets the color of ability2FI to black
-				menuitem1.setDisable(false); // Enables menuitem1
-				menuitem4.setDisable(false); // Enables menuitem4
 				createPokemonNo.next(); // Begins grabbing data for that specific Pokemon's number
 				natureCombobox.getSelectionModel().select(0); // Sets the nature in the stat calc to Hardy
 				attacklbl.setTextFill(Color.web("#000000")); // Sets the color of attacklbl to black
@@ -2812,6 +2815,7 @@ public class Main extends Application {
 					formBox.show(); // Shows the forms
 					formBox.hide(); // hides them, this and line above can't see seen
 				} // End else
+				menuitem1.setVisible(true); // Enables menuitem1
 			} // End else
 			} // End of try block
 		catch (SQLException e1) { // Catch block for SQLException, empty because there is no way of an exception happening
@@ -2848,6 +2852,12 @@ public class Main extends Application {
 			queryForm = "SELECT * FROM pokemon WHERE other_form_name = \"" +otherFormsList.indexOf(formBox.getValue())+ "\" AND pokemon_name "
 					+ "LIKE \"%" +pokemonFormNameHolder+"%\";";
 			getForm = statement.executeQuery(queryForm); // Executes the queryForm statement
+			if (formBox.getSelectionModel().getSelectedIndex() != 0) { // If the form/forme selected is NOT the base form/forme...
+				menuitem1.setVisible(false); // Disables menuitem1
+			} // end if
+			else { // Else...
+				menuitem1.setVisible(true); // Enables menuitem1
+			} // end else
 			cryButton.setVisible(true); // If the cry button isn't on yet, it turns it on now
 			type2PicView.setImage(null); // If the newly selected Pokémon doesn't have a 2nd type
 			ability2FI.setText(" "); // If the newly selected Pokémon doesn't have a 2nd ability
@@ -2895,8 +2905,6 @@ public class Main extends Application {
 			hiddenAbilityFI.setTextFill(Color.web("#000000")); // Set the color of hiddenAbilityFI to black
 			ability2FI.setFont(Font.font("System Bold", FontWeight.NORMAL, 12)); // Sets the font of ability2 to regular
 			ability2FI.setTextFill(Color.web("#000000")); // Sets the color of ability2FI to black
-			menuitem1.setDisable(false); // Enables menuitem1
-			menuitem4.setDisable(false); // Enables menuitem4
 			if(getForm.next()) { // If the getForm.next is true...
 				natureCombobox.getSelectionModel().select(0); // Sets the nature in the stat calc to Hardy
 				attacklbl.setTextFill(Color.web("#000000")); // Sets the color of attacklbl to black
@@ -3096,7 +3104,7 @@ public class Main extends Application {
                 hasDexPageSaved = getLogin.getBoolean(6);
                 Scene dialogScene = new Scene(successvbox, 200, 100); // Creates a new scene called dialogScene
                 successful.setScene(dialogScene); // Sets dialogScene scene to the successful stage
-    	        successful.getIcons().add(new Image("icon/pokeballIcon.png"));
+    	        successful.getIcons().add(new Image("icon/pokeballIcon.png")); // Add icons to successful
                 successful.show(); // Shows the successful stage
                 successful.setResizable(false); // Makes it so that successful cannot be resized
                 okButton.setOnAction(e1 -> { // Event that closes the sucess screen and opens Pokédex Pro
@@ -3107,6 +3115,8 @@ public class Main extends Application {
             		mainStage.getIcons().add(new Image("icon/pokeballIcon.png"));
             		mainStage.show(); // Shows the mainStage
             		mainStage.setResizable(false); // makes sure that mainStage cannot be resized
+            		menuitem1.setVisible(false); // Disables the save dex page menu item
+            		menuitem4.setVisible(false); // Disables the clear dex page menu item
             		if (hasDexPageSaved == true) { // If the true has saved a page from their last login...
             			/** String statement to get data for that dex page */
             			getDexPage = "SELECT * FROM pokemon JOIN login_info ON (id_of_page = pokemon_id) WHERE username = '" +username+ "'";
@@ -3158,8 +3168,8 @@ public class Main extends Application {
             				gen8lbl.setLayoutY(608); // Sets the y location of gen8lbl2 to 608
             				gen8link.setLayoutX(54); // Sets the x location of gen8link2 to 54
             				gen8link.setLayoutY(605); // Sets the y location of gen8link2 to 605
-            				menuitem1.setDisable(false); // Enables menuitem1
-            				menuitem4.setDisable(false); // Enables menuitem4
+            				menuitem1.setVisible(true); // Enables menuitem1
+            				menuitem4.setVisible(true); // Enables menuitem4
             				getDex.next(); // Begins grabbing data for that specific Pokédex page
             				natureCombobox.getSelectionModel().select(0); // Sets the nature in the stat calc to Hardy
         					attacklbl.setTextFill(Color.web("#000000")); // Sets the color of attacklbl to black
@@ -3181,7 +3191,8 @@ public class Main extends Application {
             				pokemonsprite = new Image("sprites/" +pokemonID+ ".png"); // Sets pokemonsprite to the sprite of the Pokémon selected
             				pokemonSpriteView.setImage(pokemonsprite); // Puts pokemonsprite into pokemonSpriteView to view
             				cryLoc = "cries/" +pokemonNameID+ ".mp3"; // Stores the location of mp3 file
-            				pokemonCry = new Media(getClass().getResource(cryLoc).toExternalForm()); // Sets pokemonCry to the source of the Pokémon's cry
+            				/** Sets pokemonCry to the source of the Pokémon's cry */
+            				pokemonCry = new Media(getClass().getResource(cryLoc).toExternalForm());
             				/** Puts pokemonCry into the cryPlayer for the user to listen to */
             				cryPlayer = new AudioClip(pokemonCry.getSource());
             				baseStats[0] = getDex.getInt(4); // Sets baseStats[0] to the value of the specific row at column 4 (base_hp)
@@ -3377,7 +3388,7 @@ public class Main extends Application {
                 	loginStage.close(); // closes the login page
                 	mainStage.setTitle("Pokédex Pro"); // Sets the title of mainStage to Pokédex Pro
             		mainStage.setScene(scene); // Sets scene Scene to mainStage stage
-            		mainStage.getIcons().add(new Image("icon/pokeballIcon.png"));
+            		mainStage.getIcons().add(new Image("icon/pokeballIcon.png")); // add icon to mainStage
             		mainStage.show(); // Shows mainStage
             		mainStage.setResizable(false); // makes sure that mainStage cannot be resized
                 }); // Ends successful close event
@@ -3397,7 +3408,7 @@ public class Main extends Application {
             ohnovbox.getChildren().add(ohnoAnchor); // Adds everything to the ohnovbox
             Scene dialogScene = new Scene(ohnovbox, 225, 100); // Creates a new scene called dialogScene
             ohno.setScene(dialogScene); // Sets the dialogScene scene to ohno stage
-	        ohno.getIcons().add(new Image("icon/pokeballIcon.png"));
+	        ohno.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to ohno
             ohno.show(); // Shows ohno stage
             ohno.setResizable(false); // Makes sure that ohno can't be resized
             okButton.setOnAction(e2 -> { // Event that closes ohno
@@ -3415,14 +3426,14 @@ public class Main extends Application {
 		createPWFI.clear(); // Clears out createPWFI
 		createStage.setScene(createAccountScene); // Sets the createAccountScene scene to createStage stage
 		createStage.setTitle("Create Account"); // Sets the title of createStage to Create Account
-        createStage.getIcons().add(new Image("icon/pokeballIcon.png"));
+        createStage.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to createStage
 		createStage.show(); // Shows createStage stage
 		createStage.setResizable(false); // makes sure that createStage can't be resized
 	} // End of method
 	
 	/** Method that creates the user's account */
 	public void CreateAccount() {
-		/**  If the user inputs nothing in the username and password, or if any of the fields have ", it says you can't do that */
+		/**  If the user inputs nothing in any of the fields, or have ", it says you can't do that */
 		if (firstNameFI.getText().equals("") || lastNameFI.getText().equals("") || createUNFI.getText().equals("") || 
 				createPWFI.getText().equals("") || firstNameFI.getText().equals("\"") || lastNameFI.getText().equals("\"") || 
 				createUNFI.getText().equals("\"") || createPWFI.getText().equals("\"")) {
@@ -3435,13 +3446,13 @@ public class Main extends Application {
             okButton.setLayoutX(81); // Sets the x location of okButton to 81
             okButton.setLayoutY(56); // Sets the y location of okButton to 56
             Label oklbl = new Label("All fields must be filled out"); // Label called Invalid characters inputted
-            oklbl.setLayoutX(40); // Sets the x location of oklbl to 32
+            oklbl.setLayoutX(40); // Sets the x location of oklbl to 40
             oklbl.setLayoutY(14); // Sets the y location of oklbl to 14
             ohnoAnchor.getChildren().addAll(okButton,oklbl); // Adds everything to ohnoAnchor
             ohnovbox.getChildren().add(ohnoAnchor); // Adds everything to ohnovbox
             Scene dialogScene = new Scene(ohnovbox, 225, 100); // Creates scene called dialogScene
             ohno.setScene(dialogScene); // Sets dialogScene into ohno
-	        ohno.getIcons().add(new Image("icon/pokeballIcon.png"));
+	        ohno.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to ohno
             ohno.show(); // Shows ohno stage
             ohno.setResizable(false); // Makes sure that ohno can't be resized
             okButton.setOnAction(e2 -> { // Event that closes the ohno stage
@@ -3469,7 +3480,7 @@ public class Main extends Application {
             confirm.getChildren().add(confirmAnchor); // Adds everything to confirm
             Scene dialogScene = new Scene(confirm, 218, 68); // Creates a new scene called dialogScene
             accountMade.setScene(dialogScene); // Sets dialogScene scene to accountMade stage
-	        accountMade.getIcons().add(new Image("icon/pokeballIcon.png"));
+	        accountMade.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to accountMade
             accountMade.show(); // Shows accountMade
             accountMade.setResizable(false); // Makes sure that accountMade can't be resized
             accountMade.setOnCloseRequest(e -> { // If the user uses the x button to close the dialog box
@@ -3504,7 +3515,7 @@ public class Main extends Application {
             taken.getChildren().add(takenAnchor); // Adds everything to taken
             Scene dialogScene = new Scene(taken, 218, 68); // Creates a scene called dialogScene
             usernameTaken.setScene(dialogScene); // Sets dialogScene scene to usernameTaken stage
-	        usernameTaken.getIcons().add(new Image("icon/pokeballIcon.png"));
+	        usernameTaken.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to usernameTaken
             usernameTaken.show(); // Shows usernameTaken stage
             usernameTaken.setResizable(false); // Makes sure that usernameTaken can't be resized
             okButton.setOnAction(e2 -> { // Event that closes usernameTaken stage
@@ -3528,7 +3539,7 @@ public class Main extends Application {
                 tooLongBox.getChildren().add(tooLongAnchor); // Adds everything to tooLongBox
                 Scene dialogScene = new Scene(tooLongBox, 340, 68); // Creates scene called dialogScene
                 tooLong.setScene(dialogScene); // Sets dialogScene scene to tooLong stage
-    	        tooLong.getIcons().add(new Image("icon/pokeballIcon.png"));
+    	        tooLong.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to tooLong
                 tooLong.show(); // Shows tooLong stage
                 tooLong.setResizable(false); // Makes sure that tooLong window can't be resized
                 okButton.setOnAction(e1 -> { // Event that closes tooLong
@@ -3558,7 +3569,7 @@ public class Main extends Application {
             tooLongBox.getChildren().add(tooLongAnchor); // Adds everything to tooLongBox
             Scene dialogScene = new Scene(tooLongBox, 326, 68); // Creates a scene called dialogScene
             tooLong.setScene(dialogScene); // Sets dialogScene scene to tooLong stage
-	        tooLong.getIcons().add(new Image("icon/pokeballIcon.png"));
+	        tooLong.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to tooLong
             tooLong.show(); // Shows tooLong stage
             tooLong.setResizable(false); // Makes sure that tooLong stage can't be resized
             okButton.setOnAction(e1 -> { // Event that closes tooLong stage
@@ -3586,9 +3597,10 @@ public class Main extends Application {
             tooLongBox.getChildren().add(tooLongAnchor); // Adds everything to tooLongBox
             Scene dialogScene = new Scene(tooLongBox, 326, 68); // Creates a scene called dialogScene
             tooLong.setScene(dialogScene); // Sets the dialogScene scene into tooLong stage
-	        tooLong.getIcons().add(new Image("icon/pokeballIcon.png"));
+	        tooLong.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to tooLong
             tooLong.show(); // Shows tooLong stage
             tooLong.setResizable(false); // Makes sure that tooLong stage can't be resized
+    		menuitem4.setVisible(true); // Enables menuitem4
             okButton.setOnAction(e1 -> { // Button that closes tooLong
             	tooLong.close(); // closes tooLong stage
             }); // Ends okButton event
@@ -3601,6 +3613,7 @@ public class Main extends Application {
 	/** Method that deletes the saved page that the user could have */
 	public void clearDexPage() {
 		hasDexPageSaved = false; // Sets hasDexPageSaved to false
+		menuitem4.setVisible(false); // Disables menuitem4
 		/** String that will be executed to the database */
 		clearDexPage = "UPDATE login_info SET has_dex_page_saved = " +hasDexPageSaved+ ", id_of_page = 0 WHERE username = '" +username+ "'";
 		try { // Try block that clears any saved dex page
@@ -3620,7 +3633,7 @@ public class Main extends Application {
             tooLongBox.getChildren().add(tooLongAnchor); // Adds everything to tooLongBox
             Scene dialogScene = new Scene(tooLongBox, 326, 68); // Creates a scene called dialogScene
             tooLong.setScene(dialogScene); // Puts the dialogScene scene into tooLong stage
-	        tooLong.getIcons().add(new Image("icon/pokeballIcon.png"));
+	        tooLong.getIcons().add(new Image("icon/pokeballIcon.png")); // Adds icon to tooLong
             tooLong.show(); // Shows the tooLong stage
             tooLong.setResizable(false); // Makes sure that tooLong stage can't be resized
             okButton.setOnAction(e1 -> { // Event that closes tooLong stage
